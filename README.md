@@ -1,6 +1,6 @@
 # Lighthouse prototype
 
-A clickable prototype of the Lighthouse web app, built on **Serenity 2.0**, done in stages. It is deployed on Vercel.
+A clickable prototype of the Lighthouse web app, built on **Serenity 2.0**: React Aria Components styled with the Serenity tokens and motion patterns, in Light and Dark, at every width. It is built in stages and deployed on Vercel. It is for trying and testing flows, not production code: component and prop names follow Serenity, and the shipping code stays with the developers.
 
 ## Stage 1: Home
 
@@ -12,37 +12,52 @@ The source is the Figma file *Lighthouse (Web App) Serenity 2.0*, page **👷 De
 | Tablet 768 | `74:27435` |
 | Phone 390 | `53:5059` |
 
-This iteration is the one used because it is built only from Serenity 2.0 library components (none of the local "Lighthouse additions") and it is the only Home iteration with all three widths drawn.
-
 ### What you can click
 
-- **Sidebar**: links to every section. Sections other than Home show a placeholder for now. The sidebar collapses to a rail and the logo expands it again.
-- **Search**: the sidebar row or ⌘K / Ctrl+K opens a command palette with pages, actions, transactions, cards and accounts. It works with arrow keys and Enter.
-- **Send**: a form with validation, then review, then confirm. The new transaction, the new balance and the recipient all show up on Home.
-- **Add money**: shows the deposit details with copy buttons, plus a "Simulate deposit" button for the prototype.
-- **Balance chart**: hover or focus a point to see its value, and use the arrow keys to move between points.
-- **Spending donut and legend**: hover or tap to highlight a category.
-- **Rows** (transactions, cards, accounts, expenses, recipients): open a detail sheet. Cards can be frozen and unfrozen.
+- **Sidebar** (Serenity Sidebar over the React Aria NavigationTree): every section; sections other than Home show a placeholder. Collapse sidebar or ⌘B / Ctrl+B turns it into the rail (with Tooltips); the logo expands it again. The choice is remembered.
+- **Search**: the Search row, ⌘K / Ctrl+K or / opens GlobalSearch (pages, actions, transactions, cards, accounts). Type to filter, arrows and Enter to open.
+- **Send**: form with validation, review, send. The new transaction, the new balance and the recipient show up on Home.
+- **Add money**: deposit details with copy buttons, plus "Simulate deposit".
+- **Balance chart**: hover, tap or focus a point; Left, Right, Home and End move between points.
+- **Spending donut and legend**: hover, focus or tap to highlight a category.
+- **Rows** (transactions, cards, accounts, expenses, recipients): a GridList, so arrows move and Enter opens the detail. On desktop it opens in a Sheet from the right, below 1024 in a centred Modal (SR-276). Cards can be frozen and unfrozen.
 - **Submit an expense**: the expense appears under Expenses.
-- **Tablet and phone**: a top bar with a drawer (the Sidebar as a sheet over a scrim), search, notifications and the account menu.
+- **Account menu** (the avatar): Settings, Help, the theme (Light, Dark, System) and Log out.
+- **Tablet and phone**: the TopBar with the menu (the Sidebar in a Sheet from the left), search, notifications and the account menu.
 
 State lives in memory, so reloading the page resets it.
 
+### Screens and states
+
+Every screen and state has an address, `?screen=<id>`, and `?theme=dark` or `?theme=light` picks the mode:
+
+`home`, `home-after-actions`, `home-rail`, `send-form`, `send-review`, `send-done`, `add-money`, `expense`, `detail-transaction`, `detail-card`, `detail-account`, `search`, `drawer`, `cards`.
+
+For example `/?screen=send-review&theme=dark`. The map is `SCREENS` in `src/App.jsx`.
+
 ## Stack
 
-This is static HTML, CSS and JS with no build step. Vercel serves the folder as-is.
+Vite, React 18 and React Aria Components 1.22.
 
-- `styles/tokens.css`: the Serenity 2.0 tokens (Light), with values copied from the Figma variables. Values marked `--proto-*` are prototype-only stand-ins.
-- `styles/app.css`: layout and components. Breakpoints are at 1024 (desktop shell) and 1200 (two columns).
-- `scripts/icons.js`: the Serenity icons exported from Figma.
-- `scripts/app.js`: data, rendering and interactions.
-
-**Planned next step:** move to React Aria Components with the Serenity token package once npm installs are available in the build environment.
+- `src/styles/tokens.css`: every Serenity token (Light and Dark, Desktop, Tablet and Mobile, Reduced motion) and the `.text-*` and `.effect-*` classes. `src/styles/motion.css`: one class per Serenity motion pattern. Both come from the Serenity plugin's prototype starter and are never edited by hand; copy them again after a plugin update.
+- `src/serenity/`: the Serenity components over React Aria (Button, Button: Icon, Link, TextField, NumberField, TextArea, Select, SelectBoxGroup, Dialog, Modal, Sheet, Popover, Menu, Tooltip, Toast, Stat, Badge, EmptyState, DescriptionList, Avatar, Keyboard, PageHeader, GridList, Chart, Sidebar, TopBar, GlobalSearch).
+- `src/styles/components.css` and `src/styles/app.css`: their styles and the layout, tokens only.
+- `src/screens/`: Home, the placeholder, the flows (Send, Add money, Expense) and the detail panel.
+- `src/data.js`: the prototype data and state.
 
 ## Run locally
 
 ```bash
-npx serve .
-# or
-python3 -m http.server 8000
+npm install
+npm run dev          # open the address it prints
 ```
+
+## QA
+
+```bash
+npm run build
+npm run qa           # screenshots at 1440, 768, 390 in Light and Dark, axe (WCAG 2.2 AA), focus rings, reduced motion
+node qa/flows.mjs    # clicks through every flow on Home
+```
+
+Both serve `dist/` from disk through Playwright, so no server is needed. When Playwright's own Chromium is not installed, point them at an installed Chrome: `CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm run qa`. The report and screenshots land in `qa/report/`.
