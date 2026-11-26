@@ -1,0 +1,73 @@
+/* Lighthouse app shell and the Home layout (Figma 1.0.a Home). Every value is a token.
+   Shell (SR-012, chapter 04 § App shell styles, inset): the page and the Sidebar on Surface/Sunken, the main column in one
+   white Pane (Corner radius/Container/M) Gap/8 from the frame edges. Below 1024 (SR-276): the TopBar over the page,
+   the Sidebar in a Sheet from the start edge, overlays as centred Modals. */
+
+.lh-skip { position: absolute; left: var(--gap-8); top: calc(var(--size-64) * -1); z-index: var(--prim-z-index-toast); padding: var(--gap-8) var(--gap-12); border-radius: var(--radius-control-xl); background: var(--color-fill-inverse-default); color: var(--color-text-oninverse-default); }
+.lh-skip:focus { top: var(--gap-8); box-shadow: 0 0 0 var(--size-4) var(--color-stroke-focus-neutral), 0 0 0 var(--size-2) var(--color-surface-default); }
+.lh-visually-hidden { position: absolute; width: var(--size-2); height: var(--size-2); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.lh-app { display: flex; min-height: 100dvh; }
+.lh-sidebar {
+  position: sticky;
+  top: 0;
+  flex: none;
+  width: calc(var(--size-160) + var(--size-80));
+  height: 100dvh;
+  z-index: var(--prim-z-index-sticky);
+}
+.lh-app.is-rail .lh-sidebar { width: var(--size-64); }
+.lh-main { flex: 1 1 0; min-width: var(--size-0); padding: var(--gap-8) var(--gap-8) var(--gap-8) var(--gap-0); outline: none; }
+.lh-pane { min-height: calc(100dvh - var(--gap-8) * 2); background: var(--color-surface-default); border-radius: var(--radius-container-m); }
+.lh-page { display: flex; flex-direction: column; gap: var(--gap-40); padding: var(--gap-8) var(--gap-16) var(--gap-40); }
+.lh-drawer { height: 100%; outline: none; }
+
+/* Home */
+.lh-columns { display: flex; gap: var(--gap-40); align-items: flex-start; }
+.lh-column { flex: 1 1 0; min-width: var(--size-0); display: flex; flex-direction: column; gap: var(--gap-40); }
+.lh-section { padding-inline: var(--gap-12); }
+.lh-stack { display: flex; flex-direction: column; gap: var(--gap-12); }
+.lh-stack--tight { gap: var(--gap-8); }
+.lh-stack h2 { margin: var(--gap-0); }
+.lh-actions { display: flex; gap: var(--gap-12); padding-inline: var(--gap-12); }
+.lh-stat-row { display: flex; gap: var(--gap-16); }
+.lh-stat-row > * { flex: 1 1 0; }
+.lh-list-block { display: flex; flex-direction: column; gap: var(--gap-8); }
+.lh-list-more { padding-inline: var(--gap-12); }
+.lh-bleed { margin-inline: calc(var(--gap-12) * -1); }
+
+/* Flows */
+.lh-step { display: contents; }
+.lh-muted { color: var(--color-text-tertiary); }
+.lh-amount-code { color: var(--color-text-tertiary); }
+.lh-break { overflow-wrap: anywhere; }
+.lh-copy-row { display: flex; align-items: center; gap: var(--gap-8); padding: var(--gap-10) var(--gap-12); border-radius: var(--radius-height-field-s); background: var(--color-surface-sunken); }
+.lh-copy-text { flex: 1 1 0; min-width: var(--size-0); }
+.lh-result { display: flex; flex-direction: column; align-items: center; gap: var(--gap-16); text-align: center; padding-block: var(--gap-8); }
+.lh-result-mark { display: grid; place-items: center; width: var(--size-48); height: var(--size-48); border-radius: var(--radius-control-full); background: var(--color-fill-success-subtle); color: var(--color-icon-success); }
+
+/* Desktop, narrow: one column */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .lh-columns { flex-direction: column; }
+  .lh-column { width: 100%; }
+}
+
+/* Tablet and phone */
+@media (max-width: 1023px) {
+  body { background: var(--color-surface-default); }
+  .lh-app { display: block; }
+  .lh-main { padding: var(--gap-0); }
+  .lh-pane { border-radius: var(--radius-container-none); min-height: calc(100dvh - var(--size-60)); }
+  .lh-page { padding: var(--gap-8) var(--gap-4) var(--gap-40); }
+  .lh-columns { flex-direction: column; }
+  .lh-column { width: 100%; }
+  .lh-actions > * { flex: 1 1 0; min-width: var(--size-0); }
+  .srn-sidebar--drawer { padding-top: calc(var(--gap-16) + env(safe-area-inset-top)); padding-bottom: calc(var(--gap-12) + env(safe-area-inset-bottom)); }
+}
+@media (max-width: 420px) {
+  .srn-donut-row { gap: var(--gap-24); }
+  .srn-legend { width: auto; flex: 1 1 var(--size-128); }
+}
+
+/* The rail's Tooltips sit outside the Sidebar: Expand/Width clips only while the width changes, so the rail lets them out. */
+.lh-app.is-rail .lh-sidebar { overflow: visible; }
