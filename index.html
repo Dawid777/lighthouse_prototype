@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Home · Lighthouse</title>
+  <meta name="description" content="Lighthouse clickable prototype, built on Serenity 2.0." />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://rsms.me/" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/app.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="app" id="app" data-sidebar="expanded">
+    <!-- Sidebar: rail/expanded on desktop, drawer on tablet and phone -->
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="sidebar__top">
+        <a class="brand" href="#/home" aria-label="Firefly LLC, Home">
+          <span class="brand__logo" data-icon="logo"></span>
+          <span class="brand__name">Firefly LLC</span>
+        </a>
+        <button class="icon-button icon-button--xs sidebar__toggle" type="button" id="sidebar-toggle"
+          aria-label="Collapse sidebar" aria-controls="sidebar" aria-expanded="true">
+          <span data-icon="sidebar"></span>
+        </button>
+        <button class="icon-button icon-button--l sidebar__close" type="button" id="drawer-close" aria-label="Close menu">
+          <span data-icon="close"></span>
+        </button>
+      </div>
+
+      <div class="sidebar__slot">
+        <button class="nav-item nav-item--action" type="button" data-action="open-search" title="Search ⌘K">
+          <span class="nav-item__icon" data-icon="search"></span>
+          <span class="nav-item__label">Search</span>
+          <kbd class="kbd" aria-label="Command K">⌘ K</kbd>
+        </button>
+        <nav class="nav-tree" aria-label="Primary">
+          <a class="nav-item" href="#/home" data-route="home" title="Home"><span class="nav-item__icon" data-icon="home"></span><span class="nav-item__label">Home</span></a>
+          <a class="nav-item" href="#/cards" data-route="cards" title="Cards"><span class="nav-item__icon" data-icon="credit-card"></span><span class="nav-item__label">Cards</span></a>
+          <a class="nav-item" href="#/transactions" data-route="transactions" title="Transactions"><span class="nav-item__icon" data-icon="switch-horizontal"></span><span class="nav-item__label">Transactions</span></a>
+          <a class="nav-item" href="#/payments" data-route="payments" title="Payments"><span class="nav-item__icon" data-icon="send"></span><span class="nav-item__label">Payments</span></a>
+          <a class="nav-item" href="#/invoices" data-route="invoices" title="Invoices"><span class="nav-item__icon" data-icon="file"></span><span class="nav-item__label">Invoices</span></a>
+          <a class="nav-item" href="#/tasks" data-route="tasks" title="Tasks"><span class="nav-item__icon" data-icon="check-circle"></span><span class="nav-item__label">Tasks</span></a>
+          <a class="nav-item" href="#/team" data-route="team" title="Team"><span class="nav-item__icon" data-icon="user"></span><span class="nav-item__label">Team</span></a>
+        </nav>
+      </div>
+
+      <div class="sidebar__bottom">
+        <button class="avatar-button" type="button" data-action="account-menu" aria-haspopup="menu" aria-expanded="false" aria-label="Account: Dawid">
+          <img class="avatar" src="assets/avatar.jpg" alt="" width="32" height="32" />
+        </button>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+
+    <!-- Top bar: tablet and phone -->
+    <header class="topbar">
+      <div class="topbar__leading">
+        <button class="icon-button icon-button--l" type="button" id="drawer-open" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">
+          <span data-icon="menu"></span>
+        </button>
+        <a class="topbar__logo" href="#/home" aria-label="Firefly LLC, Home"><span data-icon="logo"></span></a>
+      </div>
+      <div class="topbar__trailing">
+        <button class="icon-button icon-button--l" type="button" data-action="open-search" aria-label="Search">
+          <span data-icon="search-s"></span>
+        </button>
+        <button class="icon-button icon-button--l" type="button" data-action="notifications" aria-haspopup="dialog" aria-expanded="false" aria-label="Notifications">
+          <span data-icon="bell"></span>
+        </button>
+        <button class="avatar-button" type="button" data-action="account-menu" aria-haspopup="menu" aria-expanded="false" aria-label="Account: Dawid">
+          <img class="avatar" src="assets/avatar.jpg" alt="" width="32" height="32" />
+        </button>
+      </div>
+    </header>
+
+    <main class="main" id="main" tabindex="-1">
+      <div class="pane">
+        <div class="page" id="page"><!-- rendered by app.js --></div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Popovers -->
+  <div class="menu" id="account-menu" role="menu" aria-label="Account" hidden>
+    <div class="menu__header">
+      <img class="avatar" src="assets/avatar.jpg" alt="" width="32" height="32" />
+      <div><div class="menu__title">Dawid</div><div class="menu__caption">Firefly LLC · Admin</div></div>
+    </div>
+    <button class="menu__item" role="menuitem" type="button" data-toast="Settings is the next screen in the prototype.">Settings</button>
+    <button class="menu__item" role="menuitem" type="button" data-toast="Help center opens here in the product.">Help</button>
+    <div class="menu__divider" role="separator"></div>
+    <button class="menu__item" role="menuitem" type="button" data-toast="Logging out is turned off in the prototype.">Log out</button>
+  </div>
+
+  <div class="menu menu--wide" id="notifications" role="dialog" aria-label="Notifications" hidden>
+    <div class="menu__heading">Notifications</div>
+    <div class="empty empty--compact">
+      <span class="empty__icon" data-icon="inbox"></span>
+      <div class="empty__text"><p class="empty__title">You're all caught up</p><p class="empty__desc">New activity will show up here.</p></div>
+    </div>
+  </div>
+
+  <!-- Dialogs -->
+  <dialog class="dialog" id="dialog" aria-labelledby="dialog-title"></dialog>
+  <dialog class="dialog dialog--sheet" id="sheet" aria-labelledby="sheet-title"></dialog>
+  <dialog class="dialog dialog--search" id="search" aria-label="Search">
+    <div class="search">
+      <div class="search__field">
+        <span data-icon="search"></span>
+        <input id="search-input" type="search" placeholder="Search Lighthouse" autocomplete="off" aria-controls="search-results" aria-autocomplete="list" />
+        <kbd class="kbd">Esc</kbd>
+      </div>
+      <ul class="search__results" id="search-results" role="listbox" aria-label="Results"></ul>
+    </div>
+  </dialog>
+
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+  <script src="scripts/icons.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>

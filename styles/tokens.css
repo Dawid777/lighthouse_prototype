@@ -1,0 +1,126 @@
+/*
+ * Serenity 2.0 tokens used by the Lighthouse prototype (Light).
+ * Values are copied from the Figma variables bound in
+ * "👷 Design: Home → 1.0.a Home" (Lighthouse (Web App) Serenity 2.0).
+ * Names mirror the Figma variable names 1:1 so they can be swapped
+ * for the official Serenity token package later.
+ */
+:root {
+  /* Colour: surface */
+  --color-surface-default: #ffffff;
+  --color-surface-sunken: #f5f5f5;
+
+  /* Colour: text */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #4a4a4a;
+  --color-text-tertiary: #626262;
+  --color-text-alpha-strong: #000000e0;
+  --color-text-alpha-default: #000000b8;
+  --color-text-oninverse-default: #f5f5f5;
+
+  /* Colour: icon */
+  --color-icon-primary: #1a1a1a;
+  --color-icon-secondary: #4a4a4a;
+  --color-icon-alpha-subtle: #0000008f;
+  --color-icon-inverse-default: #ffffff;
+
+  /* Colour: fill and stroke */
+  --color-fill-inverse-default: #1a1a1a;
+  --color-fill-tertiary-hover: #0000000a;
+  --color-fill-selected-default: #e5eafd;
+  --color-stroke-subtle: #0000001a;
+  --color-stroke-default: #00000029;
+
+  /* Colour: chart */
+  --color-chart-brand-bold: #516dff;
+  --color-chart-categorical-1-default: #ea580c;
+  --color-chart-categorical-2-default: #2563eb;
+  --color-chart-categorical-3-default: #e11d48;
+  --color-chart-categorical-4-default: #ca8a04;
+
+  /* Gap */
+  --gap-0: 0px;
+  --gap-2: 2px;
+  --gap-4: 4px;
+  --gap-6: 6px;
+  --gap-8: 8px;
+  --gap-10: 10px;
+  --gap-12: 12px;
+  --gap-16: 16px;
+  --gap-20: 20px;
+  --gap-24: 24px;
+  --gap-32: 32px;
+  --gap-40: 40px;
+  --gap-48: 48px;
+
+  /* Size */
+  --size-8: 8px;
+  --size-32: 32px;
+  --size-160: 160px;
+  --component-height-field-xs: 32px;
+  --component-height-field-s: 40px;
+  --component-height-field-l: 48px;
+  --icon-size-s: 16px;
+  --icon-size-m: 20px;
+  --icon-size-l: 24px;
+  --icon-stroke-regular: 1.25;
+  --icon-stroke-bold: 2;
+
+  /* Radius */
+  --radius-height-field-xs: 8px;
+  --radius-height-field-s: 10px;
+  --radius-control-xl: 10px;
+  --radius-control-full: 9999px;
+  --radius-container-m: 12px;
+
+  /* Stroke */
+  --stroke-default: 1px;
+  --stroke-strong: 2px;
+
+  /* Type */
+  --type-family-body: "Inter", "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --type-weight-regular: 400;
+  --type-weight-medium: 500;
+  --type-size-12: 12px;
+  --type-size-14: 14px;
+  --type-size-16: 16px;
+  --type-size-20: 20px;
+  --type-size-24: 24px;
+  --type-line-height-16: 16px;
+  --type-line-height-20: 20px;
+  --type-line-height-24: 24px;
+  --type-line-height-28: 28px;
+  --type-line-height-32: 32px;
+  --type-line-height-body-m: 20px;
+  --type-letter-spacing-normal: 0px;
+  --type-letter-spacing-subtle: -0.1px;
+  --type-letter-spacing-snug: -0.4px;
+
+  /* Type: web display and body */
+  --type-size-web-display-l: 80px;
+  --type-line-height-web-display-l: 92px;
+  --type-letter-spacing-web-display-l: -1.6px;
+  --type-size-web-display-s: 40px;
+  --type-line-height-web-display-s: 48px;
+  --type-letter-spacing-web-display-s: -0.8px;
+  --type-size-web-body-l: 24px;
+  --type-line-height-web-body-l: 34px;
+  --type-size-web-body-m: 16px;
+  --type-line-height-web-body-m: 28px;
+  --type-size-web-label-s: 14px;
+  --type-line-height-web-label-s: 18px;
+
+  /*
+   * Prototype-only values. Not read from the Figma file: the Home screen
+   * does not show dialogs, menus or focus rings, so these stand in until
+   * the matching Serenity tokens are wired up.
+   */
+  --proto-focus-ring: #516dff;
+  --proto-elevation-floating: 0 1px 2px #0000000f, 0 12px 32px #0000001f;
+  --proto-scrim: #00000052;
+  --proto-radius-dialog: 16px;
+  --proto-danger: #c81e3a;
+  --proto-success: #15803d;
+  --proto-duration: 200ms;
+  --proto-ease: cubic-bezier(0.2, 0, 0, 1);
+}
