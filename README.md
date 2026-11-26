@@ -51,6 +51,23 @@ The **Prototype map** (`#/map`, also in the Account menu) links every screen and
 
 The brand photo beside the forms is the Serenity template's placeholder (glassRibbon) until the Lighthouse brand image arrives.
 
+## Stage 3: the whole Lighthouse prototype
+
+Every screen in the Figma file is in the prototype, linked together. The Sidebar reaches each section; the Account menu has Settings and the Prototype map.
+
+| Section | Figma | What you can click |
+| --- | --- | --- |
+| Cards | `25:7122` | The list (Manage · Subscriptions), a card's Overview and Transactions, Show number, Freeze, Edit card, Cancel this card, New card → Card ready. |
+| Transactions | `47:9901` | The month's list with a type filter, a transaction's details with the receipt DropZone, Transfer funds (form, review, done), Send money (pick or upload a bill). |
+| Payments | `51:5678` | Inbox · Needs approval · Scheduled · Paid, the overdue Meter, Upload bill. |
+| Money movement, Move money | `84:7472`, `84:7474` | Money in · Money spent, the month chart, an empty month; Transfer, Deposit and Request. |
+| Invoices | `55:12505` | All · Unpaid · Paid · Drafts; New invoice (customer, new customer, items, errors, preview, sent); details for unpaid, overdue, paid, draft and cancelled invoices with More (mark as paid, duplicate, reminders, cancel), Payment link and Send reminder; Customers; Reminders with the email preview. |
+| Tasks | `63:5057` | Incomplete · Completed, a payment request with Approve and Decline (with a reason), all caught up. |
+| Settings | `66:5057` | Account, Preferences (the theme switch works), Privacy and data. |
+| Consoles | `471:7471`, `474:7471` | A separate section at `#/console/...`: the Compliance queue, screening match with decisions and evidence access, customer view with revealed identifiers, EDD with a partially applied restriction, four-eyes approval, breach clocks, reporting; the Support queue (live, empty, can't load), contacts confirmed and not, customer view and dispute, money case and correction approval, and the customer-app screens (get help, contact states, can't sign in and recovery, dispute, data request, missing deposit). |
+
+Team has no screens in Figma yet, so it stays a placeholder.
+
 ## Stack
 
 Vite, React 18 and React Aria Components 1.22.

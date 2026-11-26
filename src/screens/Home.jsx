@@ -39,6 +39,7 @@ export function Home({ open }) {
               <Stat value={`+${fmt(month.moneyIn)}`}>Money in, USDC</Stat>
               <Stat value={`−${fmt(month.moneyOut)}`} description={`Net ${signed(month.moneyIn - month.moneyOut)}`}>Money spent, USDC</Stat>
             </div>
+            <div><Link href="#/money-movement">Money movement</Link></div>
           </section>
           <div className="lh-section">
             <Chart id="spend" label="Spending by category" value={`${compactK(state.spendingTotal)} USDC`} description={month.label}>
@@ -56,7 +57,7 @@ export function Home({ open }) {
           </div>
           <div className="lh-list-block">
             <GridList id="cards" header="Cards" onAction={(k) => openRow(`card:${k}`)}>
-              {state.cards.map((c) => <GridListItem key={c.id} id={c.id} description={`${c.type} · ••${c.last4}${c.frozen ? ' · Frozen' : ''}`} value={`${fmt(c.balance)} USDC`}>{c.name}</GridListItem>)}
+              {state.cards.slice(0, 2).map((c) => <GridListItem key={c.id} id={c.id} description={`${c.type} · ••${c.last4}${c.frozen ? ' · Frozen' : ''}`} value={`${fmt(c.balance)} USDC`}>{c.name}</GridListItem>)}
             </GridList>
             <div className="lh-list-more"><Link href="#/cards">All cards</Link></div>
           </div>
@@ -108,7 +109,7 @@ export function Placeholder({ title }) {
     <>
       <PageHeader>{title}</PageHeader>
       <div className="lh-section">
-        <EmptyState size="m" headingLevel={2} icon="inbox" title={`${title} is not in the prototype yet`} description={`This stage covers Home. ${title} comes in the next iteration.`}
+        <EmptyState size="m" headingLevel={2} icon="inbox" title={`${title} isn’t designed yet`} description={`There are no ${title} screens in the Figma file yet, so the prototype stops here.`}
           action={<Button size="s" variant="outlined" tone="secondary" href="#/home">Back to Home</Button>} />
       </div>
     </>

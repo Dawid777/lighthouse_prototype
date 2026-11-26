@@ -7,7 +7,8 @@ const GROUPS = [
   ['Sign up', (id) => id.startsWith('signup')],
   ['Identity verification', (id) => id.startsWith('verify')],
   ['Add money', (id) => id.startsWith('add-money')],
-  ['Home and the other flows', (id) => !/^(signup|verify|add-money|map)/.test(id)],
+  ['Home and the app pages', (id) => !/^(signup|verify|add-money|map|console)/.test(id)],
+  ['Internal consoles: Compliance and Support', (id) => id.startsWith('console')],
 ];
 const label = (id) => id.replace(/-/g, ' ').replace(/^./, (c) => c.toUpperCase());
 
@@ -18,7 +19,7 @@ export function PrototypeMap({ screens }) {
       <div className="lh-map-head">
         <Jewel size={36} />
         <h1 className="text-subtitle-large">Prototype map</h1>
-        <p className="text-body-medium lh-secondary">The whole journey starts at <Link className="lh-inline-link" href="#/signup">Create account</Link>. Each link below opens one screen or state.</p>
+        <p className="text-body-medium lh-secondary">The customer journey starts at <Link className="lh-inline-link" href="#/signup">Create account</Link>; the app is at <Link className="lh-inline-link" href="#/home">Home</Link> and the internal tools at <Link className="lh-inline-link" href="#/console/compliance">Consoles</Link>. Each link below opens one screen or state.</p>
       </div>
       {GROUPS.map(([name, test]) => (
         <section key={name} className="lh-map-group" aria-labelledby={`map-${name}`}>

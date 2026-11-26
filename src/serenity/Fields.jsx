@@ -84,11 +84,11 @@ export function Select({ label, items, size = 's', className, placeholder = 'Sel
       </AriaButton>
       <Popover offset={4} className="srn-popover srn-popover--list effect-elevation-overlay motion-enter-pop motion-exit-pop">
         <ListBox className="srn-listbox">
-          {items.map((it) => (
-            <ListBoxItem key={it} id={it} textValue={it} className={({ isFocused, isSelected }) => cx('srn-listbox-item', 'text-body-medium', isFocused && 'is-focused', isSelected && 'is-selected')}>
-              {it}
+          {items.map((raw) => { const it = typeof raw === 'string' ? { id: raw, label: raw } : raw; return (
+            <ListBoxItem key={it.id} id={it.id} textValue={it.label} className={({ isFocused, isSelected }) => cx('srn-listbox-item', 'text-body-medium', isFocused && 'is-focused', isSelected && 'is-selected')}>
+              {it.label}
             </ListBoxItem>
-          ))}
+          ); })}
         </ListBox>
       </Popover>
       <FieldFoot description={description} errorMessage={errorMessage} />

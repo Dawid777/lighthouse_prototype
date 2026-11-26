@@ -11,6 +11,12 @@ import { DetailPanel } from './screens/Detail.jsx';
 import { SignUp } from './screens/SignUp.jsx';
 import { Verify } from './screens/Verify.jsx';
 import { PrototypeMap } from './screens/Map.jsx';
+import { Cards } from './screens/Cards.jsx';
+import { Transactions, TransferDialog } from './screens/Transactions.jsx';
+import { Payments, MoneyMovement, MoveMoney } from './screens/Payments.jsx';
+import { Invoices } from './screens/Invoices.jsx';
+import { Tasks, Settings } from './screens/Tasks.jsx';
+import { Console } from './screens/Console.jsx';
 import { StoreContext, initialState, reducer } from './data.js';
 import { fmt, signed } from './format.js';
 
@@ -65,15 +71,78 @@ export const SCREENS = {
   'detail-account': { route: 'home', overlay: { kind: 'detail', key: 'acc:operating' } },
   search: { route: 'home', overlay: { kind: 'search' } },
   drawer: { route: 'home', overlay: { kind: 'drawer' } },
+  // App pages (Figma: Cards 25:7122, Transactions 47:9901, Payments 51:5678, Money movement 84:7471, Invoices 55:12505,
+  // Tasks 63:5057, Settings 66:5057)
   cards: { route: 'cards' },
+  'card-detail': { route: 'cards', step: 'c4' },
+  'card-frozen': { route: 'cards', step: 'c4', seed: [{ type: 'toggle-freeze', id: 'c4' }] },
+  'card-transactions': { route: 'cards', step: 'c4/transactions' },
+  'card-edit': { route: 'cards', step: 'c4/edit' },
+  'card-new': { route: 'cards', step: 'new' },
+  'card-ready': { route: 'cards', step: 'new-card/ready' },
+  transactions: { route: 'transactions' },
+  'transaction-detail': { route: 'transactions', step: 't3' },
+  'send-money': { route: 'transactions', step: 'send' },
+  transfer: { route: 'transactions', overlay: { kind: 'transfer' } },
+  'transfer-review': { route: 'transactions', overlay: { kind: 'transfer', step: 'review' } },
+  payments: { route: 'payments' },
+  'money-movement': { route: 'money-movement' },
+  'money-spent': { route: 'money-movement', step: 'spent' },
+  'move-money': { route: 'move-money' },
+  invoices: { route: 'invoices' },
+  'invoice-new': { route: 'invoices', step: 'new' },
+  'invoice-unpaid': { route: 'invoices', step: 'INV-0013' },
+  'invoice-overdue': { route: 'invoices', step: 'INV-0011' },
+  'invoice-paid': { route: 'invoices', step: 'INV-0009' },
+  'invoice-draft': { route: 'invoices', step: 'DRAFT-0014' },
+  customers: { route: 'invoices', step: 'customers' },
+  customer: { route: 'invoices', step: 'customers/cu1' },
+  reminders: { route: 'invoices', step: 'reminders' },
+  tasks: { route: 'tasks' },
+  'task-request': { route: 'tasks', step: 'k1' },
+  'tasks-done': { route: 'tasks', seed: [{ type: 'tasks-clear' }] },
+  settings: { route: 'settings' },
+  'settings-preferences': { route: 'settings', step: 'preferences' },
+  'settings-privacy': { route: 'settings', step: 'privacy' },
   map: { route: 'map' },
+  // Internal consoles (Figma: Compliance 471:7471, Support 474:7471)
+  'console-compliance': { route: 'console', step: 'compliance' },
+  'console-screening': { route: 'console', step: 'compliance/SCR-2291' },
+  'console-screening-false-positive': { route: 'console', step: 'compliance/SCR-2291', preset: { outcome: 'False positive' } },
+  'console-screening-justify': { route: 'console', step: 'compliance/SCR-2291', preset: { justify: true } },
+  'console-compliance-customer': { route: 'console', step: 'compliance/customer' },
+  'console-edd': { route: 'console', step: 'compliance/EDD-0331' },
+  'console-edd-confirm': { route: 'console', step: 'compliance/EDD-0331', preset: { confirm: true } },
+  'console-edd-partial': { route: 'console', step: 'compliance/EDD-0331', preset: { applied: true } },
+  'console-approval': { route: 'console', step: 'compliance/approval' },
+  'console-breach': { route: 'console', step: 'compliance/BRE-0042' },
+  'console-reporting': { route: 'console', step: 'compliance/STR-0019' },
+  'console-support': { route: 'console', step: 'support' },
+  'console-support-empty': { route: 'console', step: 'support', preset: { queue: 'empty' } },
+  'console-support-error': { route: 'console', step: 'support', preset: { queue: 'error' } },
+  'console-contact': { route: 'console', step: 'support/CT-10482' },
+  'console-contact-unconfirmed': { route: 'console', step: 'support/CT-10490' },
+  'console-support-customer': { route: 'console', step: 'support/customer' },
+  'console-money-case': { route: 'console', step: 'support/MC-0213' },
+  'console-correction': { route: 'console', step: 'support/correction' },
+  'console-app-help': { route: 'console', step: 'support/app/help' },
+  'console-app-contact': { route: 'console', step: 'support/app/contact' },
+  'console-app-contact-waiting': { route: 'console', step: 'support/app/contact', preset: { contact: 'waiting' } },
+  'console-app-contact-complaint': { route: 'console', step: 'support/app/contact', preset: { contact: 'complaint' } },
+  'console-app-signin': { route: 'console', step: 'support/app/signin' },
+  'console-app-signin-contact': { route: 'console', step: 'support/app/signin', preset: { signin: 'contact' } },
+  'console-app-signin-confirm': { route: 'console', step: 'support/app/signin', preset: { signin: 'confirm' } },
+  'console-app-dispute': { route: 'console', step: 'support/app/dispute' },
+  'console-app-data': { route: 'console', step: 'support/app/data' },
+  'console-app-deposit': { route: 'console', step: 'support/app/deposit' },
 };
-const FOCUS_ROUTES = { signup: 'Create account', verify: 'Verify your identity', map: 'Prototype map' };
+const FOCUS_ROUTES = { signup: 'Create account', verify: 'Verify your identity', map: 'Prototype map', console: 'Lighthouse consoles' };
 
-const ROUTES = Object.fromEntries(NAV.map((n) => [n.id, n.label]));
-const hashParts = () => (location.hash.replace(/^#\/?/, '') || 'signup').split('/');
+const ROUTES = { ...Object.fromEntries(NAV.map((n) => [n.id, n.label])), settings: 'Settings', 'money-movement': 'Money movement', 'move-money': 'Move money' };
+const hashParts = () => (location.hash.replace(/^#\/?/, '').split('?')[0] || 'signup').split('/');
 const routeFromHash = () => hashParts()[0];
 const stepFromHash = () => hashParts()[1];
+const restFromHash = () => hashParts().slice(1);
 const storage = {
   get: (k) => { try { return window.localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { window.localStorage.setItem(k, v); } catch { /* storage off: the choice lasts this visit */ } },
@@ -103,6 +172,7 @@ export function App({ initial, initialTheme }) {
   // A preset writes its route and step into the hash once, so the flows read their step from one place.
   const [route, setRoute] = useState(() => { if (preset) history.replaceState(null, '', `${location.pathname}${location.search}#/${preset.route}${preset.step ? `/${preset.step}` : ''}`); return routeFromHash(); });
   const [step, setStep] = useState(stepFromHash);
+  const [rest, setRest] = useState(restFromHash);
   const [overlay, setOverlay] = useState(preset?.overlay || null);
   const [expanded, setExpanded] = useState(() => (preset ? !preset.rail : storage.get('lh.sidebar') !== 'rail'));
   const [theme, setTheme] = useState(initialTheme || storage.get('lh.theme') || 'system');
@@ -122,6 +192,7 @@ export function App({ initial, initialTheme }) {
       const r = routeFromHash();
       setRoute(r);
       setStep(stepFromHash());
+      setRest(restFromHash());
       setOverlay((o) => (o?.kind === 'drawer' || FOCUS_ROUTES[r] ? null : o));
       requestAnimationFrame(() => (mainRef.current || document.getElementById('main'))?.focus({ preventScroll: true }));
       window.scrollTo(0, 0);
@@ -158,6 +229,13 @@ export function App({ initial, initialTheme }) {
       { id: 'act-send', label: 'Send money', run: () => open({ kind: 'send' }) },
       { id: 'act-add', label: 'Add money', run: () => open({ kind: 'add-money' }) },
       { id: 'act-expense', label: 'Submit an expense', run: () => open({ kind: 'expense' }) },
+      { id: 'act-transfer', label: 'Transfer funds', run: () => open({ kind: 'transfer' }) },
+      { id: 'act-card', label: 'New card', run: () => { location.hash = '#/cards/new'; } },
+      { id: 'act-invoice', label: 'New invoice', run: () => { location.hash = '#/invoices/new'; } },
+      { id: 'go-mm', label: 'Money movement', run: () => { location.hash = '#/money-movement'; } },
+      { id: 'go-move', label: 'Move money', run: () => { location.hash = '#/move-money'; } },
+      { id: 'go-customers', label: 'Customers', run: () => { location.hash = '#/invoices/customers'; } },
+      { id: 'go-settings', label: 'Settings', run: () => { location.hash = '#/settings'; } },
     ] },
     { name: 'Transactions', items: state.transactions.map((t) => ({ id: `tx-${t.id}`, label: t.name, meta: signed(t.amount), run: () => open({ kind: 'detail', key: `tx:${t.id}` }) })) },
     { name: 'Cards', items: state.cards.map((c) => ({ id: `card-${c.id}`, label: `${c.name} ••${c.last4}`, meta: fmt(c.balance), run: () => open({ kind: 'detail', key: `card:${c.id}` }) })) },
@@ -167,7 +245,7 @@ export function App({ initial, initialTheme }) {
   // The Account Menu: the person's name as the section title, Settings, Help, the theme (Light, Dark, System) and Log out.
   const accountMenu = (
     <Menu aria-label="Account" onAction={(k) => {
-      if (k === 'settings') toast('Settings is the next screen in the prototype.');
+      if (k === 'settings') location.hash = '#/settings';
       else if (k === 'help') toast('Help center opens here in the product.');
       else if (k === 'logout') { toast('Logged out'); location.hash = '#/signup'; }
     }}>
@@ -199,7 +277,8 @@ export function App({ initial, initialTheme }) {
         {route === 'signup' && <SignUp step={step || 'start'} preset={flowPreset} go={goSignup} />}
         {route === 'verify' && <Verify step={step || 'start'} preset={flowPreset} go={goVerify} account={<AccountTrigger placement="bottom end">{accountMenu}</AccountTrigger>} />}
         {route === 'map' && <PrototypeMap screens={SCREENS} />}
-        <Toasts />
+        {route === 'console' && <Console parts={rest} preset={flowPreset} />}
+        {route !== 'console' && <Toasts />}
       </StoreContext.Provider>
     );
   }
@@ -221,8 +300,17 @@ export function App({ initial, initialTheme }) {
         )}
         <main id="main" ref={mainRef} tabIndex={-1} className="lh-main">
           <div className="lh-pane">
-            <div key={route} className="lh-page motion-navigate-fade">
-              {route === 'home' ? <Home open={open} /> : <Placeholder title={ROUTES[route] || 'Not found'} />}
+            <div key={`${route}/${rest.join('/')}`} className="lh-page motion-navigate-fade">
+              {route === 'home' ? <Home open={open} />
+                : route === 'cards' ? <Cards parts={rest} />
+                : route === 'transactions' ? <Transactions parts={rest} open={open} />
+                : route === 'payments' ? <Payments />
+                : route === 'money-movement' ? <MoneyMovement parts={rest} />
+                : route === 'move-money' ? <MoveMoney open={open} />
+                : route === 'invoices' ? <Invoices parts={rest} />
+                : route === 'tasks' ? <Tasks parts={rest} />
+                : route === 'settings' ? <Settings parts={rest} theme={theme} onTheme={chooseTheme} />
+                : <Placeholder title={ROUTES[route] || 'Not found'} />}
             </div>
           </div>
         </main>
@@ -239,6 +327,7 @@ export function App({ initial, initialTheme }) {
       <GlobalSearch isOpen={isOpen('search')} onOpenChange={(o) => !o && close()} groups={searchGroups} />
       {last.send && <SendDialog key={`send-${last.send.n}`} isOpen={isOpen('send')} onClose={close} from={last.send.from} initialStep={last.send.step} initialDraft={last.send.draft} />}
       {last['add-money'] && <AddMoneyDialog key={`add-${last['add-money'].n}`} isOpen={isOpen('add-money')} onClose={close} initialStep={last['add-money'].step} preset={last['add-money'].preset} />}
+      {last.transfer && <TransferDialog key={`tr-${last.transfer.n}`} isOpen={isOpen('transfer')} onClose={close} initialStep={last.transfer.step} />}
       {last.expense && <ExpenseDialog key={`exp-${last.expense.n}`} isOpen={isOpen('expense')} onClose={close} />}
       {last.detail && <DetailPanel key={`detail-${last.detail.n}`} isOpen={isOpen('detail')} detail={last.detail.key} onClose={close} onAction={open} isCompact={isCompact} />}
       <Toasts />
