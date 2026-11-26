@@ -17,7 +17,7 @@ The source is the Figma file *Lighthouse (Web App) Serenity 2.0*, page **👷 De
 - **Sidebar** (Serenity Sidebar over the React Aria NavigationTree): every section; sections other than Home show a placeholder. Collapse sidebar or ⌘B / Ctrl+B turns it into the rail (with Tooltips); the logo expands it again. The choice is remembered.
 - **Search**: the Search row, ⌘K / Ctrl+K or / opens GlobalSearch (pages, actions, transactions, cards, accounts). Type to filter, arrows and Enter to open.
 - **Send**: form with validation, review, send. The new transaction, the new balance and the recipient show up on Home.
-- **Add money**: deposit details with copy buttons, plus "Simulate deposit".
+- **Add money**: the stage 2 flow below.
 - **Balance chart**: hover, tap or focus a point; Left, Right, Home and End move between points.
 - **Spending donut and legend**: hover, focus or tap to highlight a category.
 - **Rows** (transactions, cards, accounts, expenses, recipients): a GridList, so arrows move and Enter opens the detail. On desktop it opens in a Sheet from the right, below 1024 in a centred Modal (SR-276). Cards can be frozen and unfrozen.
@@ -34,6 +34,22 @@ Every screen and state has an address, `?screen=<id>`, and `?theme=dark` or `?th
 `home`, `home-after-actions`, `home-rail`, `send-form`, `send-review`, `send-done`, `add-money`, `expense`, `detail-transaction`, `detail-card`, `detail-account`, `search`, `drawer`, `cards`.
 
 For example `/?screen=send-review&theme=dark`. The map is `SCREENS` in `src/App.jsx`.
+
+## Stage 2: one journey, Sign up → Identity verification → Home → Add money
+
+The prototype now opens on **Create account** and runs the whole journey:
+
+| Flow | Figma page | What you can click |
+| --- | --- | --- |
+| Sign up: email or phone | `8:2971` | Email path: password with four suggested words, the strength Meter, "Why four random words?", Check your email, the expired link. Phone path: the country (search), the SMS code with Resend. Continue with Google skips to verification. |
+| Identity verification: ID and selfie | `17:6445` | Start, choose the document, get it ready, the camera, the selfie, the face scan, Checking (runs by itself), You're verified → Home. |
+| Add money | `545:21868` | Bank transfer or USDC from a wallet; the wallet check; the network (Base, Solana, another); the address with Copy address. |
+
+Prototype rules, also written on the screens: an address at firefly.com already has an account, the SMS code is 2137, a wallet address containing "dead" can't be used, and Check your email offers the email link (and the link after 24 hours). The bank transfer, the arrival time and the fee stay placeholders until PT-1; Base and Solana both stay until UXQ-17.
+
+The **Prototype map** (`#/map`, also in the Account menu) links every screen and state. Their ids: `signup`, `signup-phone`, `signup-country`, `signup-email-taken`, `signup-password`, `signup-password-weak`, `signup-why`, `signup-creating`, `signup-check-email`, `signup-code`, `signup-code-wrong`, `signup-code-incomplete`, `signup-expired`, `verify`, `verify-document`, `verify-document-error`, `verify-id-ready`, `verify-camera`, `verify-unreadable`, `verify-selfie`, `verify-face-scan`, `verify-checking`, `verify-done`, `verify-failed`, `add-money`, `add-money-wallet`, `add-money-wallet-blocked`, `add-money-network`, `add-money-network-other`, `add-money-address`, `add-money-address-error`.
+
+The brand photo beside the forms is the Serenity template's placeholder (glassRibbon) until the Lighthouse brand image arrives.
 
 ## Stack
 

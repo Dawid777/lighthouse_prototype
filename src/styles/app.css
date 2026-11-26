@@ -71,3 +71,83 @@
 
 /* The rail's Tooltips sit outside the Sidebar: Expand/Width clips only while the width changes, so the rail lets them out. */
 .lh-app.is-rail .lh-sidebar { overflow: visible; }
+
+/* ---------- Sign up: the split layout (template 3.0 Start: split; Figma 8:2971) ---------- */
+.lh-secondary { color: var(--color-text-secondary); margin: var(--gap-0); }
+.lh-auth { display: flex; min-height: 100dvh; background: var(--color-surface-default); }
+.lh-auth-form { flex: 1 1 0; min-width: var(--size-0); display: flex; flex-direction: column; }
+.lh-auth-header { display: flex; align-items: center; min-height: var(--size-72); padding-inline: var(--gap-32); }
+.lh-auth-logo { display: inline-flex; color: var(--color-icon-primary); border-radius: var(--radius-control-s); }
+.lh-auth-logo:focus-visible { box-shadow: 0 0 0 var(--size-2) var(--color-surface-default), 0 0 0 var(--size-4) var(--color-stroke-focus-neutral); outline: none; }
+.lh-auth-logo-inline { display: none; color: var(--color-icon-primary); }
+.lh-auth-main { flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: var(--gap-24) var(--gap-16); outline: none; }
+.lh-auth-content { width: 100%; max-width: var(--size-360); display: flex; flex-direction: column; gap: var(--gap-24); }
+.lh-auth-heading { display: flex; flex-direction: column; gap: var(--gap-8); padding-block-end: var(--gap-8); }
+.lh-auth-heading h1 { margin: var(--gap-0); color: var(--color-text-primary); }
+.lh-auth-form-fields { display: flex; flex-direction: column; gap: var(--gap-24); }
+.lh-auth-footer { display: flex; justify-content: center; padding: var(--gap-24) var(--gap-16); }
+.lh-auth-brand { flex: 0 0 51%; padding: var(--gap-16); }
+.lh-auth-brand .srn-media-frame { position: sticky; top: var(--gap-16); height: calc(100dvh - var(--gap-16) * 2); }
+.lh-auth-media-below { display: none; }
+.lh-or { display: flex; align-items: center; gap: var(--gap-16); color: var(--color-text-secondary); }
+.lh-or::before, .lh-or::after { content: ''; flex: 1 1 0; height: var(--stroke-default); background: var(--color-stroke-subtle); }
+.lh-switch { display: flex; flex-wrap: wrap; gap: var(--gap-4); align-items: baseline; }
+.lh-inline-link { display: inline; padding: var(--gap-0); border: none; background: none; color: var(--color-text-primary); font: inherit; text-decoration: underline; text-underline-offset: var(--size-4); cursor: pointer; border-radius: var(--radius-control-s); }
+.lh-proto-note { margin: var(--gap-0); padding: var(--gap-8) var(--gap-12); border-radius: var(--radius-container-xs); background: var(--color-surface-sunken); color: var(--color-text-secondary); }
+.lh-country { display: inline-flex; align-items: center; gap: var(--gap-6); padding: var(--gap-0) var(--gap-4); margin-inline-start: calc(var(--gap-4) * -1); border: none; border-radius: var(--radius-control-s); background: transparent; color: var(--color-text-primary); cursor: pointer; }
+.lh-country-popover { width: var(--size-320); }
+.lh-country-dialog { display: flex; flex-direction: column; gap: var(--gap-8); padding: var(--gap-8); outline: none; }
+
+@media (max-width: 1023px) {
+  .lh-auth { flex-direction: column; }
+  .lh-auth-header, .lh-auth-brand { display: none; }
+  .lh-auth-logo-inline { display: inline-flex; }
+  .lh-auth-main { align-items: flex-start; padding: var(--gap-40) var(--gap-16) var(--gap-24); flex: 0 0 auto; }
+  .lh-auth-form { flex: 1 0 auto; }
+  .lh-auth.has-media-below .lh-auth-media-below { display: block; padding: var(--gap-16) var(--gap-24) var(--gap-24); }
+  .lh-auth-footer { margin-block-start: auto; }
+}
+@media (max-width: 767px) {
+  .lh-auth.has-media-below .lh-auth-media-below { display: none; }
+  .lh-auth-content { max-width: none; }
+}
+
+/* ---------- Identity verification: the full-focus flow (SR-150; Figma 17:6445) ---------- */
+.lh-flow { display: flex; flex-direction: column; min-height: 100dvh; background: var(--color-surface-default); color: var(--color-text-primary); }
+.lh-flow-header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: var(--size-56); padding: var(--gap-8) var(--gap-32); }
+.lh-flow-leading { display: flex; justify-content: flex-start; }
+.lh-flow-center { display: flex; justify-content: center; }
+.lh-flow-center p { margin: var(--gap-0); }
+.lh-flow-trailing { display: flex; justify-content: flex-end; }
+.lh-flow-main { flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: var(--gap-24) var(--gap-16) var(--gap-48); outline: none; }
+.lh-flow-column { width: 100%; max-width: var(--size-480); display: flex; flex-direction: column; gap: var(--gap-24); }
+.lh-flow-heading { display: flex; flex-direction: column; gap: var(--gap-8); padding-block-end: var(--gap-8); }
+.lh-flow-heading h1 { margin: var(--gap-0); }
+.lh-flow-jewel { display: inline-flex; margin-block-end: var(--gap-16); color: var(--color-icon-primary); }
+.lh-flow-form { display: flex; flex-direction: column; gap: var(--gap-24); }
+.lh-flow-steps { display: flex; flex-direction: column; gap: var(--gap-16); margin: var(--gap-0); padding: var(--gap-0); list-style: none; }
+.lh-flow-steps li { display: flex; gap: var(--gap-12); }
+.lh-flow-steps li > span:last-child { display: flex; flex-direction: column; gap: var(--gap-2); }
+.lh-flow-step-icon { display: inline-flex; flex: none; color: var(--color-icon-secondary); padding-block-start: var(--gap-2); }
+.lh-flow-trust { display: flex; align-items: center; gap: var(--gap-8); }
+.lh-flow-trust svg { flex: none; color: var(--color-icon-secondary); }
+.lh-flow--dark .lh-flow-column { align-items: center; text-align: center; }
+.lh-flow-caption { margin: var(--gap-0); color: var(--color-text-secondary); }
+.lh-viewfinder { display: grid; place-items: center; width: min(var(--size-320), 80vw); aspect-ratio: 1; color: var(--color-icon-primary); transition: opacity var(--motion-duration-feedback) var(--motion-easing-default); }
+.lh-viewfinder svg { width: 100%; height: 100%; }
+.lh-viewfinder.is-flash { opacity: 0.2; }
+.lh-viewfinder--face svg { width: 60%; height: 60%; }
+.lh-viewfinder--face path { stroke-width: 0.35; }
+.lh-shutter.srn-size-l { width: var(--size-64); height: var(--size-64); }
+@media (max-width: 1023px) {
+  .lh-flow-header { padding-inline: var(--gap-16); }
+  .lh-flow-main { align-items: flex-start; padding-block-start: var(--gap-40); }
+  .lh-flow--dark .lh-flow-main { align-items: center; padding-block-start: var(--gap-24); }
+}
+
+/* ---------- Prototype map ---------- */
+.lh-map { max-width: var(--layout-container-reading); margin-inline: auto; padding: var(--gap-48) var(--gap-16) var(--gap-96); display: flex; flex-direction: column; gap: var(--gap-32); outline: none; color: var(--color-text-primary); }
+.lh-map-head { display: flex; flex-direction: column; gap: var(--gap-8); color: var(--color-icon-primary); }
+.lh-map-head h1, .lh-map-group h2 { margin: var(--gap-0); color: var(--color-text-primary); }
+.lh-map-group { display: flex; flex-direction: column; gap: var(--gap-12); }
+.lh-map-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--size-160) + var(--size-80)), 1fr)); gap: var(--gap-8) var(--gap-24); margin: var(--gap-0); padding: var(--gap-0); list-style: none; }
