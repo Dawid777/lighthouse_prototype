@@ -68,12 +68,37 @@ try {
     const { page, errors } = await newPage();
     await page.getByRole('button', { name: 'Add money' }).click();
     await page.waitForTimeout(400);
-    await page.getByRole('button', { name: 'Copy deposit address' }).click();
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(200);
+    check('Add money: Continue without a choice asks for one', (await page.getByText('Choose how to add money.').count()) === 1);
+    await page.getByRole('radio', { name: /USDC from a wallet/ }).click({ force: true });
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(500);
+    await page.getByRole('textbox', { name: 'Wallet address' }).fill('0x91C4e2A7b5D03f8C61aE97d02B54c3F1aD8edead');
+    await page.getByRole('button', { name: /Wallet or exchange/ }).click();
+    await page.getByRole('option', { name: 'Coinbase' }).click();
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(1100);
+    check('Add money: a wallet that can’t be used shows the Banner', (await page.getByText('This wallet can’t be used to add money').count()) === 1);
+    await page.getByRole('button', { name: 'Use another wallet' }).click();
+    await page.getByRole('textbox', { name: 'Wallet address' }).fill('0x91C4e2A7b5D03f8C61aE97d02B54c3F1aD8e7B20');
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(1100);
+    await page.getByRole('radio', { name: /Another network/ }).click({ force: true });
+    await page.waitForTimeout(200);
+    check('Add money: another network offers a bank transfer', (await page.getByText('Lighthouse can’t receive USDC on other networks').count()) === 1 && (await page.getByRole('button', { name: 'Use a bank transfer' }).count()) === 1);
+    await page.getByRole('radio', { name: /Solana/ }).click({ force: true });
+    await page.getByRole('button', { name: 'Show address' }).click();
+    await page.waitForTimeout(200);
+    check('Add money: the network must be confirmed', (await page.getByText('Confirm the network to continue.').count()) === 1);
+    await page.getByRole('checkbox', { name: 'My wallet will send USDC on Solana' }).click({ force: true });
+    await page.getByRole('button', { name: 'Show address' }).click();
+    await page.waitForTimeout(500);
+    await page.getByRole('button', { name: 'Copy address' }).click();
     await page.waitForTimeout(300);
-    check('Add money: copy shows a toast', /Copied to clipboard/.test(await toastText(page)));
-    await page.getByRole('button', { name: 'Simulate deposit' }).click();
-    await page.waitForTimeout(700);
-    check('Add money: deposit lands on Home', (await page.locator('#op-balance').innerText()).includes('350,730.65') && /5,000.00 USDC added/.test(await toastText(page)));
+    check('Add money: the Solana address and its copy toast', (await page.getByRole('heading', { name: 'Your Solana address' }).count()) === 1 && /Solana address copied/.test(await toastText(page)));
+    await page.getByRole('button', { name: 'Done' }).click();
+    await page.waitForTimeout(500);
 
     await page.getByRole('button', { name: 'Submit an expense' }).click();
     await page.waitForTimeout(400);
@@ -178,6 +203,85 @@ try {
     await page.waitForTimeout(700);
     check('Phone: Send from the Reserve account preselects it', await page.getByRole('radio', { name: /Reserve/ }).isChecked());
     check('Phone: no page errors', errors.length === 0, errors.join('; '));
+  }
+
+  // 9. The journey: Sign up by email → check your email → the link → Identity verification → Home
+  {
+    const { page, errors } = await newPage();
+    await page.goto(`${ORIGIN}/?theme=light`);
+    await page.waitForTimeout(600);
+    check('Journey: the prototype opens on Create account', (await page.getByRole('heading', { name: 'Create account', level: 1 }).count()) === 1);
+    await page.getByRole('textbox', { name: /Email or mobile/ }).fill('dawid@firefly.com');
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(300);
+    check('Sign up: an address with an account is refused', (await page.getByText('This email already has an account. Sign in below.').count()) === 1);
+    await page.getByRole('textbox', { name: /Email/ }).fill('amara.okafor@example.com');
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(500);
+    await page.getByRole('textbox', { name: 'Password' }).fill('rainbow1');
+    const weak = await page.locator('.srn-meter-value').innerText();
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(300);
+    check('Sign up: a weak password is refused', weak === 'Very weak' && (await page.getByText('Use four random words or a longer password.').count()) === 1, weak);
+    await page.getByRole('button', { name: 'Suggest new words' }).click();
+    check('Sign up: new words are very strong', (await page.locator('.srn-meter-value').innerText()) === 'Very strong' && (await page.getByRole('textbox', { name: 'Password' }).inputValue()).split(' ').length === 4);
+    await page.getByRole('link', { name: 'Why four random words?' }).click();
+    await page.waitForTimeout(500);
+    check('Sign up: Why four random words opens a Dialog with a close button', (await page.getByRole('dialog', { name: 'Why four random words?' }).count()) === 1 && (await page.getByRole('button', { name: 'Close' }).count()) === 1);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(1800);
+    check('Sign up: the account lands on Check your email', (await page.getByRole('heading', { name: 'Check your email' }).count()) === 1);
+    await page.getByRole('link', { name: 'open the link from the email' }).click();
+    await page.waitForTimeout(500);
+    check('Journey: the link opens Verify your identity', (await page.getByRole('heading', { name: 'Verify your identity' }).count()) === 1);
+    await page.getByRole('button', { name: 'Start verification' }).click();
+    await page.waitForTimeout(400);
+    check('Verify: Choose your document is step 1 of 4 with ID card chosen', (await page.getByRole('img', { name: 'Step 1 of 4' }).count()) === 1 && await page.getByRole('radio', { name: /ID card/ }).isChecked());
+    await page.getByRole('radio', { name: /Passport/ }).click({ force: true });
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(400);
+    check('Verify: the document names the next step', (await page.getByRole('heading', { name: 'Get your passport ready' }).count()) === 1);
+    await page.getByRole('button', { name: 'Take photo' }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Take photo' }).click();
+    await page.waitForTimeout(900);
+    await page.getByRole('button', { name: 'Start face scan' }).click();
+    await page.waitForTimeout(3000);
+    check('Verify: the face scan moves on to Checking your documents', (await page.getByRole('heading', { name: 'Checking your documents' }).count()) === 1 && (await page.getByRole('progressbar', { name: 'Checking your ID and selfie' }).count()) === 1);
+    await page.waitForTimeout(4000);
+    check('Verify: the check ends on You’re verified', (await page.getByRole('heading', { name: 'You’re verified' }).count()) === 1 && (await page.getByText('Passport checked').count()) === 1);
+    await page.getByRole('button', { name: 'Go to Home' }).click();
+    await page.waitForTimeout(600);
+    check('Journey: Go to Home lands on Home with a toast', (await page.locator('#op-balance').count()) === 1 && /Identity verified/.test(await toastText(page)));
+    check('Journey: no page errors', errors.length === 0, errors.join('; '));
+  }
+
+  // 10. Sign up by phone: the country, a wrong code, the right one
+  {
+    const { page, errors } = await newPage(390);
+    await page.goto(`${ORIGIN}/?theme=light#/signup`);
+    await page.waitForTimeout(600);
+    await page.getByRole('textbox', { name: /Email or mobile/ }).fill('612345678');
+    await page.getByRole('button', { name: /Country code/ }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('searchbox', { name: 'Search countries' }).fill('pol');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(400);
+    check('Phone sign up: the country is picked by search', (await page.getByRole('button', { name: /Country code: Poland \+48/ }).count()) === 1);
+    await page.getByRole('button', { name: 'Continue', exact: true }).click();
+    await page.waitForTimeout(500);
+    await page.getByRole('textbox', { name: 'Verification code' }).fill('2173');
+    await page.getByRole('button', { name: 'Create account' }).click();
+    await page.waitForTimeout(300);
+    check('Phone sign up: a wrong code is refused', (await page.getByText('This code is wrong. Check the SMS or send a new code.').count()) === 1);
+    await page.getByRole('textbox', { name: 'Verification code' }).fill('2137');
+    await page.getByRole('button', { name: 'Create account' }).click();
+    await page.waitForTimeout(1500);
+    check('Phone sign up: the right code opens Verify your identity', (await page.getByRole('heading', { name: 'Verify your identity' }).count()) === 1);
+    check('Phone sign up: no page errors', errors.length === 0, errors.join('; '));
   }
 } finally {
   await browser.close();

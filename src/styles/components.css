@@ -483,3 +483,88 @@
 .srn-search-clear { display: inline-grid; place-items: center; width: var(--size-24); height: var(--size-24); padding: var(--gap-0); border: none; border-radius: var(--radius-control-full); background: transparent; color: var(--color-icon-secondary); cursor: pointer; }
 .srn-search-field[data-empty] .srn-search-clear { display: none; }
 .srn-search-results { overflow: visible; }
+
+/* ---------- Banner (variant subtle, horizontal): the tone's subtle fill, its On text and icon colour; Corner radius/Container/Alert ---------- */
+.srn-banner { display: flex; gap: var(--gap-12); align-items: flex-start; padding: var(--gap-12) var(--gap-16); border-radius: var(--radius-container-alert); }
+.srn-banner-icon { display: inline-flex; flex: none; padding-block-start: var(--gap-2); }
+.srn-banner-text { display: flex; flex-direction: column; gap: var(--gap-2); min-width: var(--size-0); }
+.srn-banner-title, .srn-banner-desc { margin: var(--gap-0); }
+.srn-banner--neutral { background: var(--color-fill-neutral-subtle); color: var(--color-text-onneutral); }
+.srn-banner--neutral .srn-banner-icon { color: var(--color-icon-onneutral); }
+.srn-banner--info { background: var(--color-fill-info-subtle); color: var(--color-text-oninfo); }
+.srn-banner--info .srn-banner-icon { color: var(--color-icon-oninfo); }
+.srn-banner--success { background: var(--color-fill-success-subtle); color: var(--color-text-onsuccess); }
+.srn-banner--success .srn-banner-icon { color: var(--color-icon-onsuccess); }
+.srn-banner--warning { background: var(--color-fill-warning-subtle); color: var(--color-text-onwarning); }
+.srn-banner--warning .srn-banner-icon { color: var(--color-icon-onwarning); }
+.srn-banner--danger { background: var(--color-fill-danger-subtle); color: var(--color-text-ondanger-subtle); }
+.srn-banner--danger .srn-banner-icon { color: var(--color-icon-ondanger-subtle); }
+
+/* ---------- ProgressBar and Meter: the label row over a 4 px track (Fill/Neutral/Subtle), the fill Fill/Inverse or the status colour ---------- */
+.srn-progress, .srn-meter { display: flex; flex-direction: column; gap: var(--gap-8); }
+.srn-progress-label { color: var(--color-text-primary); }
+.srn-progress-track { position: relative; display: block; height: var(--size-4); overflow: hidden; border-radius: var(--radius-control-full); background: var(--color-fill-neutral-subtle); }
+.srn-progress-fill { position: absolute; inset-block: 0; inset-inline-start: 0; border-radius: inherit; background: var(--color-fill-inverse-default); }
+.srn-meter-row { display: flex; justify-content: space-between; gap: var(--gap-12); }
+.srn-meter-value { color: var(--color-text-secondary); }
+.srn-meter-fill { position: absolute; inset-block: 0; inset-inline-start: 0; border-radius: inherit; transition: width var(--motion-duration-feedback) var(--motion-easing-default); }
+.srn-meter-fill--danger { background: var(--color-fill-danger-default); }
+.srn-meter-fill--warning { background: var(--color-icon-warning); }
+.srn-meter-fill--success { background: var(--color-icon-success); }
+
+/* ---------- PageControl with PageIndicators: dots of Size/6 on Fill/Neutral/Strong, the current one a Size/20 capsule on Fill/Inverse ---------- */
+.srn-page-control { display: inline-flex; align-items: center; gap: var(--gap-8); padding: var(--gap-8) var(--gap-12); border-radius: var(--radius-control-full); }
+.srn-page-indicator { display: block; width: var(--size-6); height: var(--size-6); border-radius: var(--radius-control-full); background: var(--color-fill-neutral-strong); transition: width var(--motion-duration-feedback) var(--motion-easing-default); }
+.srn-page-indicator.is-current { width: var(--size-20); background: var(--color-fill-inverse-default); }
+
+/* ---------- MediaFrame (media on): the photo, Corner radius/Container/L, Fill/Neutral/Subtle under it ---------- */
+.srn-media-frame { position: relative; overflow: hidden; border-radius: var(--radius-container-l); background: var(--color-fill-neutral-subtle); }
+.srn-media-frame--16-9 { aspect-ratio: 16 / 9; }
+.srn-media-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- CheckItem: the check (Icon/Secondary) and one line ---------- */
+.srn-check-list { display: flex; flex-direction: column; gap: var(--gap-12); margin: var(--gap-0); padding: var(--gap-0); list-style: none; }
+.srn-check-item { display: flex; align-items: flex-start; gap: var(--gap-8); color: var(--color-text-primary); }
+.srn-check-icon { display: inline-flex; flex: none; padding-block-start: var(--gap-2); color: var(--color-icon-secondary); }
+
+/* ---------- Disclosure: the trigger row with the chevron, the panel under it ---------- */
+.srn-disclosure-heading { margin: var(--gap-0); }
+.srn-disclosure-trigger { display: inline-flex; align-items: center; gap: var(--gap-8); padding: var(--gap-4) var(--gap-0); border: none; border-radius: var(--radius-control-s); background: transparent; color: var(--color-text-primary); cursor: pointer; text-align: start; }
+.srn-disclosure-chevron { display: inline-flex; color: var(--color-icon-secondary); }
+.srn-disclosure[data-expanded] .srn-disclosure-chevron { transform: rotate(180deg); }
+.srn-disclosure-body { padding: var(--gap-4) var(--gap-0) var(--gap-0) var(--gap-24); color: var(--color-text-secondary); }
+
+/* ---------- Checkbox: Size/20 box on Stroke/Control, Fill/Inverse with the check when selected ---------- */
+.srn-checkbox { display: inline-flex; align-items: flex-start; gap: var(--gap-8); color: var(--color-text-primary); cursor: pointer; }
+.srn-checkbox-box { display: grid; place-items: center; flex: none; width: var(--size-20); height: var(--size-20); border: var(--stroke-default) solid var(--color-stroke-control); border-radius: var(--radius-control-s); background: var(--color-surface-default); color: var(--color-icon-inverse-default); }
+.srn-checkbox-box.is-selected { border-color: var(--color-fill-inverse-default); background: var(--color-fill-inverse-default); }
+.srn-checkbox[data-invalid] .srn-checkbox-box { border-color: var(--color-stroke-danger-default); }
+.srn-checkbox.is-focus-visible .srn-checkbox-box, .srn-checkbox-box[data-focus-ring] { box-shadow: 0 0 0 var(--size-2) var(--color-surface-default), 0 0 0 var(--size-4) var(--color-stroke-focus-neutral); }
+
+/* ---------- SelectBox, vertical rows with an icon and the radio mark (Add money 1.0, Identity verification 1.1) ---------- */
+.srn-selectbox-group--vertical { grid-template-columns: 1fr; }
+.srn-selectbox--row { flex-direction: row; align-items: center; gap: var(--gap-12); }
+.srn-selectbox-icon { display: inline-flex; flex: none; color: var(--color-icon-secondary); }
+.srn-selectbox-text { display: flex; flex-direction: column; gap: var(--gap-2); flex: 1 1 0; min-width: var(--size-0); }
+.srn-radio-mark { flex: none; width: var(--size-20); height: var(--size-20); border: var(--stroke-default) solid var(--color-stroke-control); border-radius: var(--radius-control-full); background: var(--color-surface-default); }
+.srn-selectbox[data-selected] .srn-radio-mark { border: calc(var(--size-6)) solid var(--color-fill-inverse-default); }
+.srn-selectbox-group:has(+ .srn-field-error) .srn-selectbox, [data-invalid] > .srn-selectbox-group .srn-selectbox { border-color: var(--color-stroke-danger-default); }
+
+/* ---------- OTPField: four OTPCells (Size/48) over one real input ---------- */
+.srn-otp-cells { position: relative; display: flex; gap: var(--gap-8); width: fit-content; }
+.srn-otp-cell { display: grid; place-items: center; width: var(--size-48); height: var(--size-48); border: var(--stroke-default) solid var(--color-stroke-control); border-radius: var(--radius-height-field-m); background: var(--color-surface-default); color: var(--color-text-primary); }
+.srn-otp-cell.effect-field-invalid, .srn-otp-cell.effect-focus-danger { border-color: var(--color-stroke-danger-default); }
+.srn-otp-input { position: absolute; inset: 0; width: 100%; opacity: 0; border: none; caret-color: transparent; font-size: var(--size-16); }
+
+/* ---------- SocialSignInButton: outlined on Surface/Default, Stroke/Subtle ---------- */
+.srn-social { width: 100%; background: var(--color-surface-default); border-color: var(--color-stroke-subtle); color: var(--color-text-primary); }
+.srn-social[data-hovered] { background: var(--color-fill-tertiary-hover); }
+.srn-social[data-pressed] { background: var(--color-fill-tertiary-pressed); }
+
+/* Button: Icon, solid static white (the camera shutter) and ghost on a dark surface (Fill/StaticWhite/Tertiary) */
+.srn-button-icon--solid-staticwhite { background: var(--color-fill-staticwhite-primary-default); color: var(--color-surface-default); }
+.srn-button-icon--solid-staticwhite[data-hovered] { background: var(--color-fill-staticwhite-primary-hover); }
+.srn-button-icon--solid-staticwhite[data-pressed] { background: var(--color-fill-staticwhite-primary-pressed); }
+.srn-button-icon.lh-on-dark { color: var(--color-icon-staticwhite-default); }
+.srn-button-icon.lh-on-dark[data-hovered] { background: var(--color-fill-staticwhite-tertiary-hover); }
+.srn-textarea[readonly] { resize: none; }

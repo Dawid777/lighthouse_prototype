@@ -8,19 +8,57 @@ import { EmptyState } from './serenity/Content.jsx';
 import { Home, Placeholder } from './screens/Home.jsx';
 import { SendDialog, AddMoneyDialog, ExpenseDialog } from './screens/Flows.jsx';
 import { DetailPanel } from './screens/Detail.jsx';
+import { SignUp } from './screens/SignUp.jsx';
+import { Verify } from './screens/Verify.jsx';
+import { PrototypeMap } from './screens/Map.jsx';
 import { StoreContext, initialState, reducer } from './data.js';
 import { fmt, signed } from './format.js';
 
 // The screen map of the prototype: one entry per screen and state; its id is what ?screen=<id> opens (the QA uses every id).
-// route: the page; overlay: what is open over it; seed: actions run first; rail: the collapsed Sidebar.
+// route: the page (and step, the hash #/<route>/<step>); overlay: what is open over it; seed: actions run first; rail: the
+// collapsed Sidebar; preset: the state a flow starts in. The journey: Sign up → Identity verification → Home → Add money.
 export const SCREENS = {
+  // Sign up: email or phone (Figma 8:2971)
+  signup: { route: 'signup' },
+  'signup-phone': { route: 'signup', preset: { contact: '612345' } },
+  'signup-country': { route: 'signup', preset: { contact: '612345678', countryOpen: true } },
+  'signup-email-taken': { route: 'signup', preset: { contact: 'dawid@firefly.com', step: 'start', errors: { contact: 'This email already has an account. Sign in below.' } } },
+  'signup-password': { route: 'signup', step: 'password', preset: { contact: 'amara.okafor@example.com' } },
+  'signup-password-weak': { route: 'signup', step: 'password', preset: { contact: 'amara.okafor@example.com', password: 'rainbow1' } },
+  'signup-why': { route: 'signup', step: 'password', preset: { contact: 'amara.okafor@example.com', why: true } },
+  'signup-creating': { route: 'signup', step: 'password', preset: { contact: 'amara.okafor@example.com', pending: true } },
+  'signup-check-email': { route: 'signup', step: 'check-email', preset: { contact: 'amara.okafor@example.com' } },
+  'signup-code': { route: 'signup', step: 'code' },
+  'signup-code-wrong': { route: 'signup', step: 'code', preset: { code: '2173', step: 'code', errors: { code: 'This code is wrong. Check the SMS or send a new code.' } } },
+  'signup-code-incomplete': { route: 'signup', step: 'code', preset: { code: '48', step: 'code', errors: { code: 'Enter all 4 digits.' } } },
+  'signup-expired': { route: 'signup', step: 'expired', preset: { contact: 'amara.okafor@example.com' } },
+  // Identity verification: ID and selfie (Figma 17:6445)
+  verify: { route: 'verify' },
+  'verify-document': { route: 'verify', step: 'document' },
+  'verify-document-error': { route: 'verify', step: 'document', preset: { docError: 'Choose a document to continue.' } },
+  'verify-id-ready': { route: 'verify', step: 'id-ready' },
+  'verify-camera': { route: 'verify', step: 'camera' },
+  'verify-unreadable': { route: 'verify', step: 'id-ready', preset: { unreadable: true } },
+  'verify-selfie': { route: 'verify', step: 'selfie' },
+  'verify-face-scan': { route: 'verify', step: 'face-scan' },
+  'verify-checking': { route: 'verify', step: 'checking' },
+  'verify-done': { route: 'verify', step: 'done' },
+  'verify-failed': { route: 'verify', step: 'failed' },
+  // Home and its flows
   home: { route: 'home' },
   'home-after-actions': { route: 'home', seed: [{ type: 'send', from: 'operating', to: 'Maya Chen', value: 420, note: 'Design review' }, { type: 'expense', merchant: 'Uber', value: 32.4, category: 'Travel', note: '' }] },
   'home-rail': { route: 'home', rail: true },
   'send-form': { route: 'home', overlay: { kind: 'send' } },
   'send-review': { route: 'home', overlay: { kind: 'send', step: 'review', draft: { to: 'Maya Chen', amount: 420, from: 'operating', note: 'Design review' } } },
   'send-done': { route: 'home', overlay: { kind: 'send', step: 'done', draft: { to: 'Maya Chen', amount: 420, from: 'operating', note: '' } } },
+  // Add money (Figma 545:21868)
   'add-money': { route: 'home', overlay: { kind: 'add-money' } },
+  'add-money-wallet': { route: 'home', overlay: { kind: 'add-money', step: 'wallet', preset: { method: 'wallet', address: '0x91C4e2A7b5D03f8C61aE97d02B54c3F1aD8e7B20', wallet: 'Coinbase' } } },
+  'add-money-wallet-blocked': { route: 'home', overlay: { kind: 'add-money', step: 'wallet', preset: { method: 'wallet', address: '0x91C4e2A7b5D03f8C61aE97d02B54c3F1aD8edead', wallet: 'Coinbase', blocked: true } } },
+  'add-money-network': { route: 'home', overlay: { kind: 'add-money', step: 'network', preset: { confirmed: true } } },
+  'add-money-network-other': { route: 'home', overlay: { kind: 'add-money', step: 'network', preset: { network: 'other' } } },
+  'add-money-address': { route: 'home', overlay: { kind: 'add-money', step: 'address' } },
+  'add-money-address-error': { route: 'home', overlay: { kind: 'add-money', step: 'address', preset: { unavailable: true } } },
   expense: { route: 'home', overlay: { kind: 'expense' } },
   'detail-transaction': { route: 'home', overlay: { kind: 'detail', key: 'tx:t1' } },
   'detail-card': { route: 'home', overlay: { kind: 'detail', key: 'card:c1' } },
@@ -28,10 +66,14 @@ export const SCREENS = {
   search: { route: 'home', overlay: { kind: 'search' } },
   drawer: { route: 'home', overlay: { kind: 'drawer' } },
   cards: { route: 'cards' },
+  map: { route: 'map' },
 };
+const FOCUS_ROUTES = { signup: 'Create account', verify: 'Verify your identity', map: 'Prototype map' };
 
 const ROUTES = Object.fromEntries(NAV.map((n) => [n.id, n.label]));
-const routeFromHash = () => (location.hash.replace(/^#\/?/, '') || 'home').split('/')[0];
+const hashParts = () => (location.hash.replace(/^#\/?/, '') || 'signup').split('/');
+const routeFromHash = () => hashParts()[0];
+const stepFromHash = () => hashParts()[1];
 const storage = {
   get: (k) => { try { return window.localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { window.localStorage.setItem(k, v); } catch { /* storage off: the choice lasts this visit */ } },
@@ -58,7 +100,9 @@ function applyTheme(theme) {
 export function App({ initial, initialTheme }) {
   const preset = SCREENS[initial] || null;
   const [state, dispatch] = useReducer(reducer, initialState, (s) => (preset?.seed || []).reduce(reducer, s));
-  const [route, setRoute] = useState(() => (preset ? preset.route : routeFromHash()));
+  // A preset writes its route and step into the hash once, so the flows read their step from one place.
+  const [route, setRoute] = useState(() => { if (preset) history.replaceState(null, '', `${location.pathname}${location.search}#/${preset.route}${preset.step ? `/${preset.step}` : ''}`); return routeFromHash(); });
+  const [step, setStep] = useState(stepFromHash);
   const [overlay, setOverlay] = useState(preset?.overlay || null);
   const [expanded, setExpanded] = useState(() => (preset ? !preset.rail : storage.get('lh.sidebar') !== 'rail'));
   const [theme, setTheme] = useState(initialTheme || storage.get('lh.theme') || 'system');
@@ -74,11 +118,21 @@ export function App({ initial, initialTheme }) {
   const isOpen = (kind) => overlay?.kind === kind;
 
   useEffect(() => {
-    const onHash = () => { setRoute(routeFromHash()); setOverlay((o) => (o?.kind === 'drawer' ? null : o)); mainRef.current?.focus({ preventScroll: true }); window.scrollTo(0, 0); };
+    const onHash = () => {
+      const r = routeFromHash();
+      setRoute(r);
+      setStep(stepFromHash());
+      setOverlay((o) => (o?.kind === 'drawer' || FOCUS_ROUTES[r] ? null : o));
+      requestAnimationFrame(() => (mainRef.current || document.getElementById('main'))?.focus({ preventScroll: true }));
+      window.scrollTo(0, 0);
+    };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
-  useEffect(() => { document.title = `${ROUTES[route] || 'Not found'} · Lighthouse`; }, [route]);
+  useEffect(() => { document.title = `${FOCUS_ROUTES[route] || ROUTES[route] || 'Not found'} · Lighthouse`; }, [route]);
+  const goStep = useCallback((r) => (s) => { location.hash = `#/${r}${s && s !== 'start' ? `/${s}` : ''}`; }, []);
+  const goSignup = useCallback((s) => goStep('signup')(s), [goStep]);
+  const goVerify = useCallback((s) => goStep('verify')(s), [goStep]);
   useEffect(() => { if (!isCompact && overlay?.kind === 'drawer') close(); }, [isCompact, overlay, close]);
   useEffect(() => { const on = () => setScrolled(window.scrollY > 0); window.addEventListener('scroll', on, { passive: true }); return () => window.removeEventListener('scroll', on); }, []);
 
@@ -115,11 +169,12 @@ export function App({ initial, initialTheme }) {
     <Menu aria-label="Account" onAction={(k) => {
       if (k === 'settings') toast('Settings is the next screen in the prototype.');
       else if (k === 'help') toast('Help center opens here in the product.');
-      else if (k === 'logout') toast('Logging out is turned off in the prototype.');
+      else if (k === 'logout') { toast('Logged out'); location.hash = '#/signup'; }
     }}>
       <MenuSection title={<><span className="text-body-strong-medium">Dawid</span><span className="text-caption-small srn-menu-caption">Firefly LLC · Admin</span></>}>
         <MenuItem id="settings">Settings</MenuItem>
         <MenuItem id="help">Help</MenuItem>
+        <MenuItem id="map" href="#/map">Prototype map</MenuItem>
       </MenuSection>
       <MenuSeparator />
       <MenuSection title={<span className="text-caption-strong-small">Theme</span>} selectionMode="single" selectedKeys={[theme]} onSelectionChange={(keys) => { const [k] = [...keys]; if (k) chooseTheme(k); }}>
@@ -134,6 +189,20 @@ export function App({ initial, initialTheme }) {
   const notifications = <EmptyState size="s" icon="inbox" title="You're all caught up" description="New activity will show up here." />;
 
   const sidebarProps = { route, onSearch: () => open({ kind: 'search' }), isSearchOpen: overlay?.kind === 'search' };
+
+  // Full-focus routes (SR-150): Sign up, Identity verification and the prototype map draw no Sidebar and no TopBar.
+  if (FOCUS_ROUTES[route]) {
+    const flowPreset = preset && preset.route === route ? preset.preset || {} : {};
+    return (
+      <StoreContext.Provider value={{ state, dispatch }}>
+        <a className="lh-skip text-body-medium" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Skip to content</a>
+        {route === 'signup' && <SignUp step={step || 'start'} preset={flowPreset} go={goSignup} />}
+        {route === 'verify' && <Verify step={step || 'start'} preset={flowPreset} go={goVerify} account={<AccountTrigger placement="bottom end">{accountMenu}</AccountTrigger>} />}
+        {route === 'map' && <PrototypeMap screens={SCREENS} />}
+        <Toasts />
+      </StoreContext.Provider>
+    );
+  }
 
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
@@ -169,7 +238,7 @@ export function App({ initial, initialTheme }) {
 
       <GlobalSearch isOpen={isOpen('search')} onOpenChange={(o) => !o && close()} groups={searchGroups} />
       {last.send && <SendDialog key={`send-${last.send.n}`} isOpen={isOpen('send')} onClose={close} from={last.send.from} initialStep={last.send.step} initialDraft={last.send.draft} />}
-      {last['add-money'] && <AddMoneyDialog key={`add-${last['add-money'].n}`} isOpen={isOpen('add-money')} onClose={close} />}
+      {last['add-money'] && <AddMoneyDialog key={`add-${last['add-money'].n}`} isOpen={isOpen('add-money')} onClose={close} initialStep={last['add-money'].step} preset={last['add-money'].preset} />}
       {last.expense && <ExpenseDialog key={`exp-${last.expense.n}`} isOpen={isOpen('expense')} onClose={close} />}
       {last.detail && <DetailPanel key={`detail-${last.detail.n}`} isOpen={isOpen('detail')} detail={last.detail.key} onClose={close} onAction={open} isCompact={isCompact} />}
       <Toasts />

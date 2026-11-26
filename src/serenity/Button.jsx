@@ -51,3 +51,13 @@ export function Link({ tone = 'primary', size = 's', className, children, ...pro
     </AriaLink>
   );
 }
+
+// Serenity SocialSignInButton (Google): the brand mark and "Continue with Google", size l, outlined on Surface/Default with
+// Stroke/Subtle.
+export function SocialSignInButton({ mark, children, className, ...props }) {
+  return (
+    <AriaButton {...props} className={({ isFocusVisible }) => cx('srn-button', 'srn-social', 'srn-size-l', 'text-label-medium', 'motion-feedback-press', isFocusVisible && 'effect-focus-neutral', className)}>
+      <span className="srn-button-label">{mark}{children}</span>
+    </AriaButton>
+  );
+}

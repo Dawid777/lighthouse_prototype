@@ -65,6 +65,8 @@ try {
         const has = (n) => { const st = getComputedStyle(n); return st.boxShadow !== 'none' || (st.outlineStyle !== 'none' && st.outlineWidth !== '0px'); };
         let ring = has(a);
         for (let n = a.parentElement, k = 0; n && k < 4 && !ring; n = n.parentElement, k += 1) { if (n.hasAttribute('data-focus-within') || n.hasAttribute('data-focus-visible')) ring = has(n); }
+        // a control whose ring is drawn on a sibling part (the Checkbox box, the active OTPCell) marks that part data-focus-ring
+        for (let n = a.parentElement, k = 0; n && k < 3 && !ring; n = n.parentElement, k += 1) { const part = n.querySelector('[data-focus-ring]'); if (part) ring = has(part); }
         return { el: a.outerHTML.slice(0, 100), ring };
       });
       if (r && !r.ring) findings.push({ screen: s, rule: 'focus-visible', help: 'A focused element shows no focus ring (WCAG 2.2 SC 2.4.7 Focus Visible (AA))', nodes: [r.el] });
