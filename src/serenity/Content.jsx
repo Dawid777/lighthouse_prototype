@@ -52,9 +52,9 @@ export function EmptyState({ icon = 'inbox', title, description, action, size = 
 }
 
 // Serenity DescriptionList, isStriped (SR-271: no lines between rows, every other row on Surface/Sunken), labelPosition side.
-export function DescriptionList({ items }) {
+export function DescriptionList({ items, columns }) {
   return (
-    <dl className="srn-dl">
+    <dl className={columns ? 'srn-dl srn-dl--columns' : 'srn-dl'}>
       {items.filter(Boolean).map(([term, value]) => (
         <div className="srn-dl-item" key={term}>
           <dt className="text-body-medium srn-dl-term">{term}</dt>

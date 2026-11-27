@@ -125,18 +125,22 @@ export const toastQueue = new ToastQueue({
     } else fn();
   },
 });
-export const toast = (title, tone = 'neutral') => toastQueue.add({ title, tone }, { timeout: 4000 });
+// toast(title, tone, { description, icon }): the Figma Toast with a description line (Card cancelled · AWS billing ••0330)
+// and an optional leading icon (success shows check-circle); quiet is the Figma isDismissible=off Toast (no close Button).
+export const toast = (title, tone = 'neutral', extra = {}) => toastQueue.add({ title, tone, ...extra }, { timeout: 4000 });
 
 export function Toasts() {
   return (
     <ToastRegion queue={toastQueue} className="srn-toast-region">
       {({ toast: t }) => (
         <AriaToast toast={t} className={cx('srn-toast', 'text-body-strong-medium', 'effect-elevation-overlay', 'motion-enter-toast', 'motion-exit-toast')} style={{ viewTransitionName: t.key }}>
-          {t.content.tone === 'success' && <span className="srn-toast-icon" aria-hidden="true"><Icon name="check-circle" size={20} /></span>}
-          <ToastContent className="srn-toast-content"><Text slot="title">{t.content.title}</Text></ToastContent>
-          <AriaButton slot="close" aria-label="Close" className={({ isFocusVisible }) => cx('srn-toast-close', 'motion-feedback-press', isFocusVisible && 'effect-focus-inverse-neutral')}>
-            <Icon name="close" size={16} />
-          </AriaButton>
+          {(t.content.tone === 'success' || t.content.icon) && <span className={cx('srn-toast-icon', t.content.tone !== 'success' && 'is-neutral')} aria-hidden="true"><Icon name={t.content.icon || 'check-circle'} size={20} /></span>}
+          <ToastContent className="srn-toast-content"><Text slot="title">{t.content.title}</Text>{t.content.description && <Text slot="description" className="srn-toast-desc text-body-small">{t.content.description}</Text>}</ToastContent>
+          {!t.content.quiet && (
+            <AriaButton slot="close" aria-label="Close" className={({ isFocusVisible }) => cx('srn-toast-close', 'motion-feedback-press', isFocusVisible && 'effect-focus-inverse-neutral')}>
+              <Icon name="close" size={16} />
+            </AriaButton>
+          )}
         </AriaToast>
       )}
     </ToastRegion>

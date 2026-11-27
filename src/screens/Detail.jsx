@@ -26,6 +26,14 @@ export function DetailPanel({ detail, isOpen, onClose, onAction, isCompact }) {
     title = c.name; sub = `${c.type} card · ••${c.last4}`; amount = fmt(c.balance);
     rows = [['Status', <Badge key="b">{c.frozen ? 'Frozen' : 'Active'}</Badge>], ['Cardholder', c.holder], ['Number', `•••• •••• •••• ${c.last4}`], ['Spent this month', `${fmt(c.spent)} USDC`]];
     actions = () => <><Button variant="outlined" tone="secondary" size="l" onPress={() => { dispatch({ type: 'toggle-freeze', id: c.id }); toast(`${c.name} ${c.frozen ? 'unfrozen' : 'frozen'}`); }}>{c.frozen ? 'Unfreeze card' : 'Freeze card'}</Button><Button size="l" href="#/cards">Open in Cards</Button></>;
+  } else if (kind === 'ctx') {
+    // A card transaction (Cards 1.5): the row of the card's Transactions view. The key is ctx:<transaction>:<card>.
+    const t = state.cardTransactions.find((x) => x.id === id); const c = state.cards.find((x) => x.id === detail.split(':')[2]);
+    if (!t) return null;
+    const tone = { Paid: 'green', Declined: 'red', 'Receipt missing': 'amber' }[t.status];
+    title = t.merchant; sub = `${t.type}, ${t.date}`; amount = signed(t.amount);
+    rows = [['Status', <Badge key="b" tone={tone}>{t.status}</Badge>], ['Date', t.date], ['Type', t.type], c && ['Card', `${c.name} ••${c.last4}`], c && ['Cardholder', c.holder]];
+    actions = (close) => <Button variant="outlined" tone="secondary" size="l" onPress={close}>Close</Button>;
   } else if (kind === 'acc') {
     const a = state.accounts.find((x) => x.id === id); if (!a) return null;
     title = `${a.name} account`; sub = `${pct(a.balance, total(state))} of total`; amount = fmt(a.balance);
