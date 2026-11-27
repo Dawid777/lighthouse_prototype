@@ -165,8 +165,46 @@
 .lh-actions--flush { padding-inline: var(--gap-0); }
 .lh-filter-row { display: flex; align-items: flex-end; gap: var(--gap-12); flex-wrap: wrap; }
 .lh-filter-select { width: calc(var(--size-160) + var(--size-80)); }
-.lh-payment-card { display: flex; flex-direction: column; justify-content: space-between; gap: var(--gap-24); width: 100%; max-width: var(--size-360); aspect-ratio: 1.586; padding: var(--gap-20); border-radius: var(--radius-container-l); background: var(--lh-card-color); color: var(--color-text-staticwhite-default); box-shadow: inset 0 0 0 var(--stroke-default) var(--color-stroke-subtle); }
-.lh-payment-card.is-frozen { filter: grayscale(1); }
+/* PaymentCard (Figma component): 400 × 252 at most, Corner radius 16 (Container/L), the design as its background (set inline). */
+.lh-payment-card { position: relative; display: flex; flex-direction: column; justify-content: space-between; width: 100%; max-width: calc(var(--size-360) + var(--size-40)); aspect-ratio: 400 / 252; padding: var(--gap-24); border-radius: var(--radius-container-l); color: var(--color-text-staticwhite-default); box-shadow: inset 0 0 0 var(--stroke-default) rgb(255 255 255 / 0.16); overflow: hidden; }
+.lh-payment-card.is-light { color: var(--color-text-staticblack-default); box-shadow: inset 0 0 0 var(--stroke-default) rgb(255 255 255 / 0.6); }
+.lh-payment-card.is-silver { color: #4a4a4a; }
+.lh-payment-card-top, .lh-payment-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: var(--gap-8); }
+.lh-payment-card-owner { display: inline-flex; align-items: center; gap: var(--gap-6); }
+.lh-payment-card-type { padding: 0 var(--gap-4); border-radius: var(--radius-control-s); background: rgb(0 0 0 / 0.56); color: var(--color-text-staticwhite-default); line-height: var(--size-16); }
+.lh-payment-card.is-light .lh-payment-card-type { background: rgb(229 229 229); color: #383838; box-shadow: inset 0 0 0 var(--stroke-default) rgb(0 0 0 / 0.08); }
+.lh-payment-card-number { font-size: var(--type-size-20); line-height: var(--size-24); letter-spacing: 0.04em; white-space: pre; }
+.lh-payment-card-expiry { opacity: 0.85; }
+.lh-payment-card.is-light .lh-payment-card-expiry { color: #4a4a4a; opacity: 1; }
+.lh-payment-card svg { flex: none; }
+
+/* Cards 1.1: the card column (400) and the details column, Gap/64 between. */
+.lh-card-detail { display: grid; grid-template-columns: minmax(0, calc(var(--size-360) + var(--size-40))) minmax(0, 1fr); gap: var(--gap-64); align-items: start; }
+.lh-card-detail-main { display: flex; flex-direction: column; gap: var(--gap-24); min-width: var(--size-0); }
+.lh-card-detail-side { display: flex; flex-direction: column; gap: var(--gap-40); min-width: var(--size-0); }
+.lh-split-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-16); }
+.lh-card-cancel { display: flex; }
+.lh-card-tx { gap: var(--gap-24); }
+.lh-table-foot { display: flex; justify-content: flex-end; padding-block: var(--gap-12); }
+.lh-search-row { padding-block-end: var(--gap-0); max-width: var(--size-480); }
+.lh-grouped + .lh-grouped { margin-block-start: var(--gap-8); }
+.lh-grouped .srn-gridlist-value { color: var(--color-text-primary); }
+
+/* Cards 1.2 – 1.4: one centred column, 480 wide, the card visual centred over it. */
+.lh-form--centred { margin-inline: auto; width: 100%; padding-block-start: var(--gap-40); }
+.lh-card-visual { display: flex; justify-content: center; }
+.lh-wide-button { width: 100%; }
+.lh-card-ready { padding-block-start: var(--gap-24); }
+@media (max-width: 1023px) {
+  .lh-card-detail { grid-template-columns: minmax(0, 1fr); gap: var(--gap-32); }
+  .lh-card-cancel { justify-content: center; }
+  .lh-form--centred { max-width: none; padding-block-start: var(--gap-24); }
+  .lh-card-visual { justify-content: flex-start; }
+}
+@media (max-width: 767px) {
+  .lh-form--centred { padding-block-start: var(--gap-16); }
+  .lh-card-detail-main .lh-payment-card, .lh-card-visual .lh-payment-card { max-width: none; }
+}
 .lh-invoice-paper { display: flex; flex-direction: column; gap: var(--gap-16); padding: var(--gap-24); border: var(--stroke-default) solid var(--color-stroke-subtle); border-radius: var(--radius-container-m); }
 .lh-invoice-paper h2 { margin: var(--gap-0); }
 .lh-qr { display: grid; grid-template-columns: repeat(9, 1fr); width: var(--size-160); aspect-ratio: 1; margin-inline: auto; padding: var(--gap-8); border-radius: var(--radius-container-s); background: var(--color-surface-staticwhite-default); }

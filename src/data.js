@@ -66,7 +66,7 @@ export function reducer(state, action) {
     case 'card-cancel':
       return { ...state, cards: state.cards.filter((c) => c.id !== action.id) };
     case 'card-create':
-      return { ...state, cards: [{ ...action.card, id: id('c'), isNew: true }, ...state.cards] };
+      return { ...state, cards: [{ ...action.card, id: action.card.id || id('c'), isNew: true }, ...state.cards] };
     case 'card-update':
       return { ...state, cards: state.cards.map((c) => c.id === action.id ? { ...c, ...action.patch } : c) };
     case 'tx-receipt':

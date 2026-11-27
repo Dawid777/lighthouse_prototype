@@ -1,28 +1,36 @@
 // Prototype data for the app pages, taken from the Figma screens (Cards 25:7122, Transactions 47:9901, Payments 51:5678,
 // Money movement 84:7472, Invoices 55:12505, Tasks 63:5057, Settings 66:5057). Kept in memory; a reload resets it.
 
-export const CARD_COLORS = [
-  { name: 'Midnight', hex: '#1f2340' }, { name: 'Forest', hex: '#1f4a3a' }, { name: 'Aurora', hex: '#4b3a8f' },
-  { name: 'Ember', hex: '#8a3b2a' }, { name: 'Graphite', hex: '#3a3a3a' },
+// The PaymentCard designs (Figma PaymentCard, property design): the ColorSwatchPicker of New card shows them in this order.
+export const CARD_DESIGNS = [
+  { id: 'graphite', name: 'Graphite' }, { id: 'sand', name: 'Sand' }, { id: 'aurora', name: 'Aurora' },
+  { id: 'photo', name: 'Photo' }, { id: 'forest', name: 'Forest' },
 ];
 
+// The Cards page list (Figma Cards 1.0) is the cards with listed !== false; Ops card and Alan's card belong to Home 1.0.a
+// and are reached from there only.
 export const cards = [
-  { id: 'c1', name: 'Ops card', last4: '6034', type: 'Virtual', kind: 'credit', holder: 'Dawid', balance: 2350.4, spent: 1284.2, limit: 3000, status: 'Active', account: 'Operating ••4417', created: 'Mar 2, 2026', color: '#1f2340' },
-  { id: 'c2', name: "Alan's card", last4: '4417', type: 'Virtual', kind: 'credit', holder: 'Alan Rutledge', balance: 640.12, spent: 287.89, limit: 2000, status: 'Active', account: 'Operating ••4417', created: 'Apr 18, 2026', color: '#4b3a8f' },
-  { id: 'c3', name: 'Sofia’s card', last4: '5555', type: 'Physical', kind: 'debit', holder: 'Sofia Lindström', balance: 0, spent: 0, limit: 2000, status: 'Active', account: 'Operating ••4417', created: 'May 3, 2026', color: '#1f4a3a' },
-  { id: 'c4', name: 'AWS billing', last4: '0330', type: 'Virtual', kind: 'credit', holder: 'Sofia Lindström', balance: 500, spent: 1500, limit: 2000, status: 'Active', account: 'Card float ••6034', created: 'Jun 12, 2026', color: '#1f2340' },
-  { id: 'c5', name: 'Ads spend', last4: '3054', type: 'Virtual', kind: 'credit', holder: 'Sofia Lindström', balance: 500, spent: 1500, limit: 2000, status: 'Active', account: 'Card float ••6034', created: 'Jun 12, 2026', color: '#8a3b2a' },
-  { id: 'c6', name: 'Travel expenses', last4: '8628', type: 'Virtual', kind: 'credit', holder: 'Sofia Lindström', balance: 0, spent: 0, limit: 1000, status: 'Suspended', account: 'Card float ••6034', created: 'Jul 1, 2026', color: '#3a3a3a' },
-  { id: 'c7', name: 'Kristin’s card', last4: '3745', type: 'Physical', kind: 'debit', holder: 'Kristin Watson', balance: 1163, spent: 837, limit: 2000, status: 'Active', account: 'Operating ••4417', created: 'Aug 9, 2026', color: '#1f4a3a' },
+  { id: 'c1', name: 'Ops card', last4: '6034', type: 'Virtual', kind: 'credit', holder: 'Dawid', balance: 2350.4, spent: 1284.2, limit: 3000, status: 'Active', account: 'Operating ••4417', created: 'Mar 2, 2026', design: 'graphite', listed: false },
+  { id: 'c2', name: "Alan's card", last4: '4417', type: 'Virtual', kind: 'credit', holder: 'Alan Rutledge', balance: 640.12, spent: 287.89, limit: 2000, status: 'Active', account: 'Operating ••4417', created: 'Apr 18, 2026', design: 'aurora', listed: false },
+  { id: 'c3', name: 'Sofia’s card', last4: '5555', type: 'Physical', kind: 'debit', holder: 'Sofia Lindström', balance: 2000, spent: 0, limit: 2000, status: 'Active', account: 'Operating ••4417', created: 'May 3, 2026', design: 'forest' },
+  { id: 'c4', name: 'AWS billing', last4: '0330', type: 'Virtual', kind: 'credit', holder: 'Sofia Lindström', balance: 500, spent: 1500, limit: 2000, status: 'Active', account: 'Card float ••6034', created: 'Jun 12, 2026', design: 'graphite' },
+  { id: 'c5', name: 'Ads spend', last4: '3054', type: 'Virtual', kind: 'credit', holder: 'Sofia Lindström', balance: 500, spent: 1500, limit: 2000, status: 'Active', account: 'Card float ••6034', created: 'Jun 12, 2026', design: 'aurora' },
+  { id: 'c6', name: 'Travel expenses', last4: '8628', type: 'Virtual', kind: 'credit', holder: 'Sofia Lindström', balance: 0, spent: 0, limit: 1000, status: 'Suspended', account: 'Card float ••6034', created: 'Jul 1, 2026', design: 'photo' },
+  { id: 'c7', name: 'Kristin’s card', last4: '3745', type: 'Physical', kind: 'debit', holder: 'Kristin Watson', balance: 1163, spent: 837, limit: 2000, status: 'Active', account: 'Operating ••4417', created: 'Aug 9, 2026', design: 'sand' },
+  { id: 'c8', name: 'Grocery / meals', last4: '4928', type: 'Virtual', kind: 'debit', holder: 'Kristin Watson', balance: 500, spent: 0, limit: 500, status: 'Active', account: 'Operating ••4417', created: 'Aug 9, 2026', design: 'forest' },
+  { id: 'c9', name: 'Vendor payments', last4: '6112', type: 'Virtual', kind: 'credit', holder: 'Kristin Watson', balance: 2013, spent: 2987, limit: 5000, status: 'Active', account: 'Card float ••6034', created: 'Sep 1, 2026', design: 'graphite' },
 ];
 
+// Card transactions (Figma Cards 1.5): group is the date heading of the phone list.
 export const cardTransactions = [
-  { id: 'ct1', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Today, 9:14am', amount: -412.6, status: 'Paid' },
-  { id: 'ct2', merchant: 'Datadog', type: 'Merchant not allowed', date: 'Today, 8:02am', amount: -49, status: 'Declined' },
-  { id: 'ct3', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Yesterday, 6:40pm', amount: -887.4, status: 'Receipt missing' },
-  { id: 'ct4', merchant: 'AWS Marketplace', type: 'Card payment', date: 'Yesterday, 11:05am', amount: -250, status: 'Paid' },
-  { id: 'ct5', merchant: 'Amazon Web Services', type: 'Refund', date: 'Yesterday, 10:22am', amount: 50, status: 'Paid' },
-  { id: 'ct6', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Sep 30, 2026', amount: -1342.18, status: 'Paid' },
+  { id: 'ct1', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Today, 9:14am', time: '9:14am', group: 'Today', amount: -412.6, status: 'Paid' },
+  { id: 'ct2', merchant: 'Datadog', type: 'Merchant not allowed', date: 'Today, 8:02am', time: '8:02am', group: 'Today', amount: -49, status: 'Declined' },
+  { id: 'ct3', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Yesterday, 6:40pm', time: '6:40pm', group: 'Yesterday', amount: -887.4, status: 'Receipt missing' },
+  { id: 'ct4', merchant: 'AWS Marketplace', type: 'Card payment', date: 'Yesterday, 11:05am', time: '11:05am', group: 'Yesterday', amount: -250, status: 'Paid' },
+  { id: 'ct5', merchant: 'Amazon Web Services', type: 'Refund', date: 'Yesterday, 10:22am', time: '10:22am', group: 'Yesterday', amount: 50, status: 'Paid' },
+  { id: 'ct6', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Sep 30, 2026', time: 'Sep 30, 2026', group: 'Sep 2026', amount: -1342.18, status: 'Paid' },
+  { id: 'ct7', merchant: 'Amazon Web Services', type: 'Card payment', date: 'Sep 15, 2026', time: 'Sep 15, 2026', group: 'Sep 2026', amount: -1120, status: 'Paid' },
+  { id: 'ct8', merchant: 'AWS Marketplace', type: 'Card payment', date: 'Sep 3, 2026', time: 'Sep 3, 2026', group: 'Sep 2026', amount: -1500, status: 'Paid' },
 ];
 
 // The transactions page list; the first three are the Home rows (t1–t3).

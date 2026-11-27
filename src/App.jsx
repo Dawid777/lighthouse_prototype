@@ -73,13 +73,17 @@ export const SCREENS = {
   drawer: { route: 'home', overlay: { kind: 'drawer' } },
   // App pages (Figma: Cards 25:7122, Transactions 47:9901, Payments 51:5678, Money movement 84:7471, Invoices 55:12505,
   // Tasks 63:5057, Settings 66:5057)
+  // Cards (Figma 25:7122): every frame has its preset.
   cards: { route: 'cards' },
+  'cards-cancelled': { route: 'cards', seed: [{ type: 'card-cancel', id: 'c4' }], preset: { toast: ['Card cancelled', 'neutral', { icon: 'notifications', description: 'AWS billing ••0330', quiet: true }] } },
   'card-detail': { route: 'cards', step: 'c4' },
   'card-frozen': { route: 'cards', step: 'c4', seed: [{ type: 'toggle-freeze', id: 'c4' }] },
-  'card-transactions': { route: 'cards', step: 'c4/transactions' },
+  'card-cancel': { route: 'cards', step: 'c4', preset: { cancel: true } },
+  'card-saved': { route: 'cards', step: 'c4', preset: { toast: ['Changes saved', 'success', { description: 'AWS billing ••0330', quiet: true }] } },
   'card-edit': { route: 'cards', step: 'c4/edit' },
   'card-new': { route: 'cards', step: 'new' },
-  'card-ready': { route: 'cards', step: 'new-card/ready' },
+  'card-ready': { route: 'cards', step: 'cnew/ready', seed: [{ type: 'card-create', card: { id: 'cnew', name: 'Alan’s virtual card', last4: '4417', type: 'Virtual', kind: 'credit', holder: 'Alan Rutledge', balance: 2000, spent: 0, limit: 2000, period: 'Monthly', status: 'Active', account: 'Card float ••6034', created: 'Today', design: 'aurora' } }] },
+  'card-transactions': { route: 'cards', step: 'c4/transactions' },
   transactions: { route: 'transactions' },
   'transaction-detail': { route: 'transactions', step: 't3' },
   'send-money': { route: 'transactions', step: 'send' },
@@ -302,7 +306,7 @@ export function App({ initial, initialTheme }) {
           <div className="lh-pane">
             <div key={`${route}/${rest.join('/')}`} className="lh-page motion-navigate-fade">
               {route === 'home' ? <Home open={open} />
-                : route === 'cards' ? <Cards parts={rest} />
+                : route === 'cards' ? <Cards parts={rest} preset={preset && preset.route === 'cards' ? preset.preset : undefined} open={open} />
                 : route === 'transactions' ? <Transactions parts={rest} open={open} />
                 : route === 'payments' ? <Payments />
                 : route === 'money-movement' ? <MoneyMovement parts={rest} />
