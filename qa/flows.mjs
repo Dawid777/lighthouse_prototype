@@ -160,7 +160,7 @@ try {
 
     await page.getByRole('link', { name: 'Cards', exact: true }).click();
     await page.waitForTimeout(500);
-    check('Navigation: Cards is current and shows its placeholder', (await page.getByRole('heading', { name: 'Cards', level: 1 }).count()) === 1 && (await page.getByRole('link', { name: 'Cards', exact: true }).getAttribute('aria-current')) === 'page');
+    check('Navigation: Cards is current and shows the Cards page', (await page.getByRole('heading', { name: 'Cards', level: 1 }).count()) === 1 && (await page.getByRole('link', { name: 'Cards', exact: true }).getAttribute('aria-current')) === 'page');
     check('Flows 2–7: no page errors', errors.length === 0, errors.join('; '));
   }
 
@@ -192,7 +192,7 @@ try {
     await page.getByRole('dialog', { name: 'Main navigation' }).getByRole('link', { name: 'Transactions' }).click();
     await page.waitForTimeout(700);
     check('Phone: the drawer navigates and closes', (await page.getByRole('heading', { name: 'Transactions', level: 1 }).count()) === 1 && (await page.getByRole('dialog', { name: 'Main navigation' }).count()) === 0);
-    await page.getByRole('link', { name: 'Back to Home' }).click();
+    await page.evaluate(() => { location.hash = '#/home'; });
     await page.waitForTimeout(600);
     await page.getByRole('row', { name: /Reserve/ }).click();
     await page.waitForTimeout(700);
@@ -282,6 +282,76 @@ try {
     await page.waitForTimeout(1500);
     check('Phone sign up: the right code opens Verify your identity', (await page.getByRole('heading', { name: 'Verify your identity' }).count()) === 1);
     check('Phone sign up: no page errors', errors.length === 0, errors.join('; '));
+  }
+  // 11. App pages: cards, transfer, invoices, tasks, settings
+  {
+    const { page, errors } = await newPage();
+    await page.goto(`${ORIGIN}/?theme=light#/cards`);
+    await page.waitForTimeout(600);
+    await page.getByRole('row', { name: /AWS billing/ }).click();
+    await page.waitForTimeout(500);
+    await page.getByRole('button', { name: 'Freeze', exact: true }).click();
+    await page.waitForTimeout(300);
+    check('Cards: freezing shows the Banner and the Frozen badge', (await page.getByText(/Frozen today/).count()) === 1);
+    await page.getByRole('button', { name: 'Cancel this card' }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Cancel card', exact: true }).click();
+    await page.waitForTimeout(600);
+    check('Cards: a cancelled card leaves the list', (await page.getByRole('row', { name: /AWS billing/ }).count()) === 0 && /Card cancelled/.test(await toastText(page)));
+    await page.getByRole('button', { name: 'New card' }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Create card' }).click();
+    await page.waitForTimeout(500);
+    check('Cards: a new card lands on Card ready', (await page.getByRole('heading', { name: 'Your card is ready' }).count()) === 1);
+
+    await page.goto(`${ORIGIN}/?theme=light#/transactions`);
+    await page.waitForTimeout(600);
+    await page.getByRole('button', { name: 'Transfer', exact: true }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Review' }).click();
+    await page.waitForTimeout(300);
+    await page.getByRole('button', { name: 'Transfer', exact: true }).last().click();
+    await page.waitForTimeout(1000);
+    check('Transfer: the done step and the toast', (await page.getByRole('heading', { name: 'Your transfer is done' }).count()) === 1);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(400);
+
+    await page.goto(`${ORIGIN}/?theme=light#/invoices/new`);
+    await page.waitForTimeout(600);
+    await page.getByRole('button', { name: 'Add item' }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('textbox', { name: 'Description' }).fill('Logo animation');
+    await page.getByRole('textbox', { name: 'Price' }).fill('800');
+    await page.getByRole('button', { name: 'Add item' }).last().click();
+    await page.waitForTimeout(400);
+    const totalText = await page.locator('.srn-stat-value').first().innerText();
+    await page.getByRole('button', { name: 'Preview' }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Send invoice' }).click();
+    await page.waitForTimeout(500);
+    check('Invoices: an item adds to the total and the invoice sends', totalText.includes('6,400.00') && (await page.getByRole('heading', { name: 'Invoice sent' }).count()) >= 1, totalText);
+
+    await page.goto(`${ORIGIN}/?theme=light#/tasks`);
+    await page.waitForTimeout(600);
+    await page.getByRole('row', { name: /Meridian Health Supplies/ }).click();
+    await page.waitForTimeout(400);
+    await page.getByRole('button', { name: 'Approve' }).click();
+    await page.waitForTimeout(1100);
+    check('Tasks: approving returns to the list with one less open', /11 open/.test(await page.locator('h1').innerText()));
+
+    await page.goto(`${ORIGIN}/?theme=light#/settings/preferences`);
+    await page.waitForTimeout(600);
+    await page.getByRole('radio', { name: 'Dark' }).click().catch(async () => { await page.getByRole('button', { name: 'Dark' }).click(); });
+    await page.waitForTimeout(500);
+    check('Settings: the theme switches from Preferences', (await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark');
+
+    await page.goto(`${ORIGIN}/?theme=light#/console/compliance/SCR-2291`);
+    await page.waitForTimeout(600);
+    await page.getByRole('radio', { name: 'False positive' }).click({ force: true });
+    await page.getByRole('button', { name: 'Record decision' }).click();
+    await page.waitForTimeout(400);
+    check('Console: a false positive closes the case', (await page.getByRole('heading', { name: /closed as a false positive/ }).count()) === 1);
+    check('App pages: no page errors', errors.length === 0, errors.join('; '));
   }
 } finally {
   await browser.close();
